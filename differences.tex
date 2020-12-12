@@ -1,0 +1,40 @@
+\begingroup
+\begin{table*}[!h]
+\centering
+\begin{tabular}{|p{3cm}|p{6.9cm}|p{6.4cm}|}
+\hline
+\textbf{Use Case} & \textbf{In situ reduction via Lagrangian flow map} & \textbf{Post hoc flow analysis} \\
+\hline
+%\textbf{Task} & Computation of Lagrangian flow map & Computation of particle trajectories for specific analysis \\
+%\hline
+\textbf{Input / Output} & Simulation vector field / Flow map & Eulerian mesh or flow map / Trajectories \\
+\hline
+\textbf{Objective} & Store representation of vector field & Analysis and visualization of vector field \\
+\hline
+\textbf{Vector Field Type} & Unsteady (time-varying) state & Steady and unsteady state \\
+\hline
+\textbf{Number of Particles} & Depends on sampling strategy and data set size & Depends on analysis task and data set size \\
+\hline
+\textbf{Number of Steps} & Depends on storage interval/sampling strategy & Depends on analysis task \\
+\hline
+\textbf{Memory Constraints} & Shared with simulation code and typically limited
+%~(trajectory representation and number of time-slices accessible)
+%. Consequentially, particle trajectory represention and number of vector field time-slices accessible are restricted 
+& Can use all available memory \\
+%, but might be shared with visualization software \\
+\hline
+\textbf{Spatial Decomposition and Data Access} & Simulation-determined with each rank accessing one data block & Can be strategically modified, duplicated, requested on-demand, etc. \\
+\hline
+\textbf{Communication} & Required every cycle to compute a complete flow map & Can be strategically performed and/or delayed \\
+\hline
+\textbf{Load Balance} & Depends on sampling strategy & Depends on analysis task \\
+\hline
+\textbf{Preprocessing} & No prior work & Used in several works \\
+\hline
+\textbf{Domain Coverage} & Strategy to maintain domain coverage is necessary & Depends on analysis task \\
+\hline
+\end{tabular}
+\caption{Differences in distributed-memory particle advection factors for in situ data reduction and post hoc analysis.}
+\label{table:differences}
+\end{table*}
+\endgroup

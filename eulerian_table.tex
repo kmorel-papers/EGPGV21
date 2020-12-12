@@ -1,0 +1,19 @@
+\begingroup
+\begin{table}[h]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|c||c|c|c|c|}
+\hline
+Storage & \multicolumn{2}{c|}{Lagrangian$_{Local}$} & \multicolumn{2}{c|}{Eulerian} \\
+Interval & Avg \% of GCS & Storage & Avg \% of GCS & Storage \\
+\hline
+20 & 18.8 & 34 & 115.4 & 267 \\
+40 & 25.2 & 17 & 269.0 & 133 \\
+60 & 37.5 & 12 & 424.8 & 95 \\
+\hline
+\end{tabular}
+}
+\caption{Comparison of Lagrangian$_{Local}$ and the traditional approach, i.e., the Eulerian representation with temporal subsampling, for the Cloverleaf3D dataset. The error is the average percentage of grid cell side and is computed for 100,000 pathlines over 600 cycles. The unit for storage is GB.}
+\label{clover_eul_table}
+\end{table}
+\endgroup

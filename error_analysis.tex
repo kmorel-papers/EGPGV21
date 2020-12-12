@@ -1,0 +1,85 @@
+%%\renewcommand{\baselinestretch}{2}
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+%
+Although our main contribution is a quantitative empirical evaluation, for generality, this section provides a theoretical error analysis of our strategy to compute local Lagrangian flow maps.
+%
+
+We use a one-dimensional linear interpolation $L$ of a function $f:\mathbb R\to \mathbb R$ for $x\in[x_0,x_1]\subset\mathbb R$
+%
+\begin{footnotesize}
+\begin{eqnarray}
+\begin{aligned}\label{linearInterpolation}
+%\resizebox{0.45\textwidth}{!}
+L_{f(x_0),f(x_1)}(x) = \frac{x-x_0}{x_1-x_0}f(x_1) + \frac{x_1-x}{x_1-x_0}f(x_0).
+\end{aligned}
+\end{eqnarray}
+\end{footnotesize}
+%
+Higher dimensional results satisfy~\eqref{linearInterpolation} for each component.
+In our approach, a particle starting at $x_1$ that reaches the node boundary before a storage cycle is discarded.
+%
+Thus, its function value (the flow map) is not known. 
+%
+However, we can reconstruct it from its known neighbors $L_{f(x_0),f(x_2)}(x_1)$. 
+%
+Consider a particle $x\in[x_0,x_1]\subset\mathbb R$ whose path is interpolated post hoc using this reconstructed value. 
+%
+We get the same result as if we had used the closest existing neighbors directly, because let $L'$ denote $L_{f(x_0),L_{f(x_0),f(x_2)}(x_1)}(x)$, then
+%
+\begin{footnotesize}
+%\begin{scriptsize}
+\begin{eqnarray}
+\begin{aligned}\label{doubleInterpolation}
+L' &\overset{\eqref{linearInterpolation}}= \frac{x-x_0}{x_1-x_0}L_{f(x_0),f(x_2)}(x_1) + \frac{x_1-x}{x_1-x_0}f(x_0)\\
+&\overset{\eqref{linearInterpolation}}= \frac{x-x_0}{x_1-x_0}(\frac{x_1-x_0}{x_2-x_0}f(x_2) + \frac{x_2-x_1}{x_2-x_0}f(x_0)) + \frac{x_1-x}{x_1-x_0}f(x_0)\\
+&= \frac{x-x_0}{x_2-x_0}f(x_2) + \frac{(x_2-x_1)(x-x_0)+(x_2-x_0)(x_1-x)}{(x_2-x_0)(x_1-x_0)} f(x_0)\\
+&= \frac{x-x_0}{x_2-x_0}f(x_2) + \frac{x_2-x}{x_2-x_0}f(x_0)\\
+&\overset{\eqref{linearInterpolation}}= L_{f(x_0),f(x_2)}(x).
+\end{aligned}
+\end{eqnarray}
+%\end{scriptsize}
+\end{footnotesize}
+%
+Bujack et al.~\cite{bujack2015lagrangian} previously established that the post hoc interpolation 
+of pathlines is a numerical one-step integration method~\cite{GH10}. 
+%
+Its accuracy is bounded by its global truncation error at stitching step $n\in\mathbb N$ of 
+%
+\begin{footnotesize}
+\begin{equation}
+\begin{aligned}\label{global}
+e_{n}\leq\frac {d^2}8(t_n-t_0) h_x^2\max_{\tau\in[t_0,t_n]}\max_{\zeta\in\mathbb R^d}
+\| H_{{\dot F}_{t_{j-1}}^{\tau}}(\zeta)\|_{\infty}e^{L(t_n-t_0)}
+\end{aligned}
+\end{equation}
+\end{footnotesize}
+%
+with dimension $d$, start time $t_0$, end time $t_n$, spatial Lipschitz constant $L$, Hessian $H$ of the temporal derivative of the flow map $\dot F$, and spatial distance $h_x$ between the basis flows.
+%
+As a result, the interpolation error is $O(h_x^2)$ if the flow map has bounded second derivatives in space and first derivatives in time, which is a reasonable assumption for a differentiable vector field, because the solutions of an initial value problem depend smoothly on the initial conditions and time~\cite{hartman1973ordinary}.
+%
+
+Equation~\eqref{doubleInterpolation} shows that the error bound $O(\tilde h_x^2)$ still holds but with a larger $\tilde h_x>h_x$. 
+%
+Its size is determined by the size of missing information, which is limited by the maximum distance particles can move in one time interval.
+%
+If a particle is seeded further than $\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i)\|$ away from the node boundary, it cannot reach it and must therefore have the correct flow map information.
+%
+In the worst case, we can have missing information on both sides of the boundary, and therefore we get
+%
+\begin{footnotesize}
+\begin{eqnarray}
+\begin{aligned}\label{hx}
+\tilde h_x&\leq 2h_x+2\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i)\|\\
+&\leq 2h_x+2 h_t \max_{x\in\mathbb R^d} \max_{t\in[t_{j-1},t_j]}\| v(x,t)\|
+\end{aligned}
+\end{eqnarray}
+\end{footnotesize}
+%
+with the underlying velocity field $v:\mathbb R^d \times \mathbb R \to \mathbb R^d$ and the temporal step size $h_t$, which is the interval time between storing data to disk, which is usually around one-thousandth of the total integration time.
+%
+Please note that the future increase of the global truncation error of a particle that traverses this region can continue even after it has left the region, but for all particles that never enter the region close to the boundary, the original error bound holds.
+%
+%\renewcommand{\baselinestretch}{1}
+

@@ -1,0 +1,136 @@
+In this section, we describe our data sets and experiments.
+%In this section, we describe the data sets and experiments that inform various performance aspects of Lagrangian flow map computation as well as evaluate the reconstruction accuracy, benefits, and limitations of the proposed optimization. 
+%
+\subsection{Data Sets}
+We compute Lagrangian flow maps for four data sets.
+
+\textbf{Cloverleaf3D.} This mini ECP application that solves compressible Euler equations in a hydrodynamics setting on a Cartesian grid using an explicit second-order method~\cite{mallinson2013cloverleaf}.
+%
+Cloverleaf3D has been developed and used in several studies to evaluate emerging architectures and various techniques targeting large-scale applications.
+%
+The simulation is initially relatively stable and begins with an energy bar expanding from the center.
+%
+Configurations for the Cloverleaf3D simulation vary from $64^{3}$ ($\approx$ 262k cells) to $812^{3}$ ($\approx$ 535M cells).
+
+\textbf{Arnold-Beltrami-Childress (ABC) Flow.} A popular turbulent velocity field parameterized using three variables (we use $A=B=C=1$), it is a solution of Euler's equations in 3D for incompressible, inviscid fluid flows. 
+%\textbf{Arnold-Beltrami-Childress (ABC) Flow.} A popular turbulent velocity field parameterized using three variables (we use $1$, $B=1$, and $C=1$), it is a solution of Euler's equations in 3D for incompressible, inviscid fluid flows. 
+%
+%It is often considered a prototype for the study of turbulence. %~\cite{ershkov2016existence}.
+%
+We consider a grid size of $256^{3}$ ($\approx$ 16.5M cells) and generate 400 cycles of a time-dependent variant~\cite{brummell2001linear} with a time step of 0.001.
+
+\textbf{Nyx.} The Nyx simulation is a N-body and gas dynamics code for large-scale cosmological simulations~\cite{almgren2013nyx}. 
+%
+We use a test executable named TurbForce and generate 400 cycles of a $128^3$ data set ($\approx$ 2M cells) with a time step of 0.002.
+%
+The generated flow field grows in turbulence over the duration of the simulation. 
+
+\textbf{Jet Flow.} This data set is a simulation of a jet of high-velocity fluid entering a medium at rest. 
+%
+It was created using the Gerris Flow Solver~\cite{popinet2003gerris}.
+%
+The vector field is defined over a $128\times256\times128$ uniform grid ($\approx$ 4.1M cells) and 300 cycles with a step size of 0.001.
+%
+\subsection{Experiment Setup}
+For this study, we set up two workflows:
+\begin{itemize}[leftmargin=*]
+\item\textbf{Workflow1.} The first set of experiments is a weak scaling study on a modern supercomputer utilizing in situ infrastructure.
+%
+Here, Ascent is directly connected to the Cloverleaf3D simulation code. 
+%
+We 
+%conduct a weak scaling study, and 
+evaluate the impact of the number of ranks and GPUs engaged per CN on communication and particle advection costs. 
+%
+\item\textbf{Workflow2.} For the second set of experiments, we work with the ABC, Nyx, and Jet time-varying data sets.
+%
+We create a workflow using Ascent and load files from disk for every cycle.
+%
+A fixed number of resources (1 GPU/rank, 4 ranks/CN, 16 CNs) are used for these experiments.
+%
+Here, the number of particles used to sample the domain is controlled by a data reduction factor (denoted by 1:X, i.e., one particle for every X grid points). 
+%
+%We denote a particle data reduction factor in the form of 1:X, i.e., one particle for every X grid points.
+%
+We also consider multiple values for the storage interval. 
+%
+These tests provide insight into Lagrangian flow map computation performance on a fixed scale and reveal vector field-specific trends.
+%
+\end{itemize}
+
+For each test of \textbf{Workflow1} and \textbf{Workflow2}, we execute both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$.
+%
+%Furthermore, we reconstruct the discarded trajectories from Lagrangian$_{Local}$ and compare them to the ground truth, i.e., a particle trajectory computed using every cycle of the time-varying vector field.
+
+Our study consists of two additional experiments that use the Cloverleaf3D simulation and evaluate accuracy by calculating full pathlines post hoc: 
+%
+\begin{itemize}[leftmargin=*]
+\item\textbf{AE1.} We compare Lagrangian$_{Local}$ to Lagrangian$_{Dist}$ under adversarial settings: high domain decomposition (more boundaries), long storage interval, and sparse sampling. 
+%
+\item\textbf{AE2.} We compare Lagrangian$_{Local}$ to the Eulerian technique to verify that accuracy-storage benefits remain. 
+\end{itemize}
+\subsection{Performance Metric: Execution Time}
+%We measure the execution time for both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ while executing in situ and use Ascent's timing functionality.
+%
+We consider the execution time required in situ for particle advection, communication, and the total time, and report the average per cycle across the entire run.
+%
+To simplify comparisons, we exclude cycles at the end of a storage interval. 
+%
+These cycles include a communication cost incurred to return all particles to the respective origin nodes for Lagrangian$_{Dist}$ and an I/O cost to write data to disk.
+%
+In this paper, we do not analyze the parallel I/O times, and consider I/O optimization methods to be beyond the scope of this work.
+
+For post hoc reconstruction, a Delaunay triangulation is performed using CGAL~\cite{2020cgal} on a local cluster.
+%
+In our experiments, the number of points for both Lagrangian$_{Local}$ and Lagrangian$_{Dist}$ are of the same magnitude and thus, require similar reconstruction times.
+%
+%An additional consideration is the time required for post hoc reconstruction.
+%
+%We only consider ``valid'' particle trajectories from either technique, thus requiring an interpolation strategy that can operate on an unstructured set of points.
+%
+%For our study, we used the same reconstruction implementation for both methods.
+%
+%Lagrangian$_{Local}$ would require performing triangulation over the same or less number of unstructured points as Lagrangian$_{Dist}$.
+%
+%Further, although our implementation can directly extend to a distributed setting, we were limited to single node reconstruction on our local research cluster.
+%
+Since the focus of this paper is the in situ extraction phase, we leave optimizations and accelerations of post hoc techniques for future work.
+\subsection{Reconstruction Accuracy}
+We measure accuracy in two contexts: (1) reconstruction of any discarded particle trajectories, and (2) full pathlines.  
+%We measure accuracy in two contexts: (1) to measure how accurately we can reconstruct any discarded particle trajectories, and (2) to measure the accuracy of full pathlines.  
+%
+In both cases, we measure Euclidean distances and represent error as a percentage of the grid cell side (GCS) to provide a perspective that is relative to the simulation domain.
+
+The first priority is understanding how accurately we can reconstruct the flow map. 
+%, i.e., all particle trajectories computed using Lagrangian$_{Dist}$.
+%
+Since Lagrangian$_{Local}$ discards particle trajectories, potentially leaving a void of samples in the domain near boundaries, we reconstruct these trajectories by interpolating the stored flow map.
+%
+We compare the reconstructed particle trajectories to the ground truth by measuring the Euclidean distance between the end points.
+%
+The statistics do not include all the particle trajectories that were successfully computed and stored since these are already accurate.
+%
+Including these trajectories would skew the overall result.
+%
+Therefore, we present the percentage of both accurate and reconstructed particle trajectories for each test.
+%
+The reconstruction accuracy is presented using violin plots and heatmaps (2D histograms) to convey the distribution of error. 
+
+Second, for \textbf{AE1} and \textbf{AE2} we measure the accuracy of new pathlines.
+%
+In this case, pathlines are computed for the entire duration of the simulation run, and we report the average L2-norm over all interpolated locations for each particle.
+%
+
+Lastly, Lagrangian-based advection involves scattered point interpolation methods and, consequentially, any error introduced by the chosen method.
+%
+Lagrangian-based advection used for pathline interpolation has been studied by prior works~\cite{agranovsky2015subsampling, bujack2015lagrangian, hummel2016error, sane2018revisiting, sane2019interpolation}. 
+\subsection{Runtime Environment}
+We tested the Lagrangian analysis techniques by running the experiments on Summit (a supercomputer at ORNL).
+%
+Each CN of Summit has two IBM Power9 CPUs
+%, each with 22 cores running at 3.8 GHz and 512 GBytes of DDR4 memory.
+%
+with enhanced on-chip acceleration via NVLink to 3 GPUs each, for a total of 6 GPUs per CN.
+%Further, CNs on Summit have enhanced on-chip acceleration with each CPU connected via NVLink to 3 GPUs, for a total of 6 GPUs per CN.
+%
+Each GPU is a NVIDIA Tesla V100 with 5120 CUDA cores, 6.1 TeraFLOPS of double precision performance, and 16 GBytes of HBM2 memory.

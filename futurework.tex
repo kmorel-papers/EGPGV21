@@ -1,0 +1,52 @@
+%The major focus of this work is scalability and the use of local Lagrangian flow maps, an intrinsically scalable optimization. 
+%
+Several areas for the in situ computation and use of Lagrangian flow maps have not yet been addressed.
+%
+We list these aspects with an eye toward possible future work.
+
+
+\textbf{Temporal Sampling.} Prior work has considered only fixed durations, i.e., storage intervals, before particle trajectory locations are stored to disk. 
+%
+However, the right temporal sampling frequency varies not only from data set to data set but also for each particle trajectory.
+%
+Future research might look to relax the constraint of storing at fixed intervals, enabling greater temporal resolution of the data for post hoc exploration.
+%
+%We expect advances in temporal sampling techniques could significantly improve information per byte stored to disk.
+
+\textbf{Spatial Sampling.} Thus far, only uniform sampling has been considered in a distributed memory setting.
+%
+As techniques explore feature-guided sampling strategies, maintaining load balance across all CNs will increasingly become a challenge.
+%
+Additionally, sampling can be strategically performed to maintain domain coverage near regions of interest or along boundaries in the case of local flow maps.
+
+\textbf{Trajectory Representation.} In this and prior works, only minimal representations of a trajectory are stored in memory or to disk.
+%
+Although requiring less memory in situ, the shortcoming of this approach is being limited to linear interpolation between the start and end positions. 
+%
+Storing multiple locations along a trajectory can improve particle location approximation accuracy using curve-fitting techniques.
+%
+These approaches, however, could increase the use of runtime memory. 
+
+\textbf{Triggers.} In situ tasks can use triggers to direct analysis and computation efforts. 
+%
+Triggers can provide the flexibility to react to the underlying vector field by controlling spatial or temporal sampling, communication, and memory usage. 
+%The use of triggers to control spatial or temporal sampling, communication, and runtime memory usage can provide techniques with a flexibility to react to the underlying vector field.
+
+%\textbf{Post Hoc Interpolation.} As the extracted Lagrangian flow map increases in complexity, efficiently interpolating it for interactive exploration is difficult.
+%%
+%For example, interpolating particle trajectories that start and stop at arbitrary times.
+%%
+%Further, depending on the size of the stored data, distributed Lagrangian-based advection schemes will be needed.
+%%
+
+\textbf{Visualization.} 
+%As extracted Lagrangian flow maps increase in complexity, efficiently interpolating them for interactive exploration is hard.
+%
+%For example, interpolating a flow map containing particle trajectories that start and stop at arbitrary times.
+%
+Depending on the size and format of the stored flow maps, the design of efficient distributed-memory Lagrangian-based advection schemes for interactive exploration is the next step.
+%
+Further, the current literature lacks qualitative evaluations showing the uncertainty introduced under sparse temporal settings by traditional and Lagrangian-based advection schemes.
+%
+Another potential direction of research involves direct rendering of the Lagrangian flow maps for time-varying vector field visualization. 
+%

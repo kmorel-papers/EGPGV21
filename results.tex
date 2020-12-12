@@ -1,0 +1,230 @@
+We organize our results into four subsections, with each subsection focusing on experiments using one data set.
+
+\input{weakscaling.tex}
+\subsection{Cloverleaf3D Simulation}
+\label{sec:clover}
+
+\textbf{Weak Scaling Study.} We considered 17 configurations of the Cloverleaf3D simulation in our weak scaling \textbf{Workflow1} study. 
+%
+Our experiment configurations span $81^{3}$ cells across 2 MPI ranks on 1 CN to $812^{3}$ cells across 2048 MPI ranks on 512 CNs, with each MPI rank operating on an approximately $64^{3}$ grid.
+%
+In each case, one GPU is assigned to every MPI rank, and we vary the number of ranks per CN.
+%
+For the number of MPI ranks on each CN, we consider 1 test using 2 ranks, 10 tests using 4 ranks, and 6 tests using 6 ranks.
+%
+For each run, we terminated the simulation after 500 cycles.
+%
+Given the variation in grid size, each test reaches a different stage of the simulation.
+%
+As the simulation grid size increases, the step size used by the simulation decreases.
+%
+We believe this is an acceptable assumption for most simulation codes.
+%
+With respect to parameterization of the Lagrangian flow map computation, we use a storage interval of 25 cycles and a data reduction of 1:8 ($\approx32,768$ particles seeded per MPI rank) for every test.
+
+Figure~\ref{fig:total_time} compares the average total time required per step by Lagrangian$_{Dist}$ and Lagrangian$_{Local}$.
+%
+As the scale of the simulation increases, the cost of communication dominates the execution time for Lagrangian$_{Dist}$.  
+%
+In comparison, Lagrangian$_{Local}$ scales better because each MPI rank operates independently.
+%
+For the range of configurations considered, Lagrangian$_{Local}$ demonstrated up to 4x speed-up over Lagrangian$_{Dist}$,
+%
+but we expect this speed-up to increase as the scale of the simulation increases.
+%
+The cost of particle advection (for both techniques) increases as the scale of the simulation increases.
+%
+However, this increase in particle advection cost is attributed to the difference in each test domain and the RK4 kernel that performs velocity field interpolation.
+%
+%We believe the performance of the kernel considering the parameters of cell size, step size, and vector field is worth future investigation.
+%
+Further, use of a faster particle advection kernel would result in greater speed-ups for Lagrangian$_{Local}$.
+
+\textbf{Varying GPUs/Ranks per Compute Node.}
+Since each CN on Summit has 6 GPUs a simulation can be configured in several ways.
+%
+In our tests, each rank has a dedicated GPU and operates on approximately the same number of particles.
+%
+Varying the number of ranks on each CN impacts both particle advection and communication costs.
+%
+Using data points from our weak scaling \textbf{Workflow1} study, we analyze these effects.
+%
+
+Figure~\ref{fig:advection} isolates the costs of particle advection per step of Lagrangian$_{Local}$.
+%
+Particle advection performs better with 4 GPUs per CN versus 6.
+%
+Use of shared memory by multiple GPUs on a single CN and saturation of the NVLink by the VTK-m particle advection kernel causes this effect.
+%
+
+Figure~\ref{fig:communication} shows the difference in communication costs per step for Lagrangian$_{Dist}$.
+%
+The MPI communication cost shows a reduction when using 6 ranks versus 4 per CN, although our data points using 4 ranks per CN scales poorly as the number of CNs increases.
+%
+On-node MPI communication optimizations contribute to better performance when grouping a larger number of MPI ranks on each CN, but the communication cost of inter-node remains high in comparison to intra-node.
+\input{gpu_nodes.tex}
+
+%
+%Although these results inform computational performance, the specific configuration is determined by the simulation.
+%
+
+\textbf{Reconstruction Accuracy.}
+We calculated the reconstruction accuracy for a subset of the Lagrangian$_{Local}$ weak scaling \textbf{Workflow1} configurations since it takes prohibitively long periods of time for the larger grid sizes on our single-node local machine.
+%
+Configurations terminated 2\%-5\% of particles and consequently stored 95\%-98\% of all initially seeded trajectories. 
+%
+We measured the accuracy of reconstructing the discarded trajectories only and present the results using violin plots in Figure~\ref{fig:clover_plot}.
+%
+As the simulation grid resolution increases, the grid cell size and particle advection step size decrease, while the total number of particles sampling the domain increases. 
+%
+The majority of discarded trajectories are reconstructed under 50\% of a GCS from the ground truth.
+%
+Further, this trend was observed across all the test configurations we reconstructed. 
+
+Reconstruction accuracy, however, is not constant across all storage intervals and demonstrates temporal patterns.
+%
+%
+Figure~\ref{fig:clover_map} uses a heatmap for reconstruction accuracy across every interval of a Cloverleaf3D test. 
+%
+Measuring reconstruction accuracy for individual intervals could provide insight into the suitability to compute local Lagrangian flow maps versus incur communication costs to retain all particles trajectories.
+%
+This concept can extend to consider spatial patterns as well. 
+
+\input{clover_plot.tex}
+\input{clover_map.tex}
+
+
+Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8 data reduction factor, the complete Lagrangian flow map can be reconstructed with high accuracy while providing speed-ups of 2x-4x for the Cloverleaf3D data set.
+
+\textbf{Impact of Domain Decomposition.}
+%
+\input{strongscaling.tex}
+%
+Although multiphysics HPC simulations typically have hundreds of thousands of grid points per data block, we evaluate Lagrangian$_{Local}$ in situations where this is not the case.
+%
+Since the strategy is to discard trajectories exiting the rank-specific domain, this approach is susceptible to smaller low resolution blocks, longer storage intervals (i.e., integration times), and data reduction factor.
+%
+This \textbf{AE1} experiment measures the error of $1,000$ new pathlines generated for 800 cycles compared to the ground truth. 
+%
+Further, three parameter options are considered for domain decomposition, storage interval, and data reduction factor. 
+%
+Figure~\ref{fig:strongscaling} shows the pathline error when interpolating the flow maps generated by Lagrangian$_{Dist}$ and Lagrangian$_{Local}$. 
+%
+The accuracy of Lagrangian$_{Local}$ remains close to Lagrangian$_{Dist}$ until the domain decomposition is at its highest ($64^{3}$ grid decomposed into 32 blocks).
+%
+%
+Although the overall accuracy of the interpolated pathlines is high (within a single GCS on average for all tests), both techniques lose some accuracy as the storage interval and data reduction factor increase, with Lagrangian$_{Local}$ performing worse under greater domain decomposition.
+%
+These results highlight the limitations of the Lagrangian$_{Local}$ technique as is.
+%
+%That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
+
+\textbf{Comparison to Traditional Approach.}
+\textbf{AE2} compares Lagrangian$_{Local}$ to using an Eulerian representation with temporal subsampling.
+%
+Table~\ref{clover_eul_table} shows the results of \textbf{AE2}.
+%
+We considered three storage intervals: 20, 40, and 60.
+%
+We used 96 MPI ranks distributed across 16 CNs and a grid size of $586^3$.
+%
+Lagrangian$_{Local}$ used a data reduction of 1:8, whereas for the Eulerian technique we stored the full spatial resolution.
+%
+To compare accuracy, we reconstructed 100,000 randomly seeded pathlines for 600 cycles.
+%
+%
+Overall, Lagrangian$_{Local}$ is increasingly accurate (6x to 11x) compared to the Eulerian approach as the interval size increases, but requires less data storage.
+%
+These results align with findings in prior works~\cite{agranovsky2014improved, sane2018revisiting} that compared the use of Lagrangian representations to the traditional approach under sparse temporal settings.
+\input{eulerian_table.tex}
+
+\subsection{ABC Flow}
+\label{sec:abc}
+
+Table~\ref{abc_tab} lists all the ABC \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:abc_plot} shows the distribution of trajectory reconstruction error for each test.
+%
+\input{abc_maps.tex}
+\input{abc_table.tex}
+
+\textbf{Execution Time.} Using 64 MPI ranks, each with 1 GPU, across 16 CNs, Lagrangian$_{Dist}$ requires up to 2.8x more execution time as Lagrangian$_{Local}$.
+%
+Figure~\ref{fig:dataset_timings} shows particle advection and communication costs are directly proportional to the particle count.
+%
+Further, particle advection for up to 2M particles, i.e., 32k particles per GPU, can be performed in under 0.004 seconds per step for all data sets.
+%
+\input{dataset_timings.tex}
+\input{abc_plot.tex}
+
+\textbf{Reconstruction Accuracy.} Figure~\ref{fig:abc_plot} indicates the ABC data set shows shifts in reconstruction error distribution when varying the storage intervals and sampling resolution while remaining within similar ranges.
+%
+Overall, the discarded trajectories from the ABC data set Lagrangian flow map can be reconstructed very accurately, with trajectories interpolated to the same grid cell as the ground truth.
+%
+Specifically, reconstructions are under 10\% of a GCS away from the ground truth.
+%
+
+\textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4, T5, and T6.
+%
+Comparing the heatmaps, the effect of increasing the storage interval is a larger number of particles are terminated in a single interval. 
+%
+Further, the reconstruction error distribution matches the violin plots of T4, T5, and T6 in Figure~\ref{fig:abc_plot}. 
+%
+Even for longer storage intervals, the error remains small, and discarded trajectories are reconstructed with high accuracy for the ABC data set.
+
+\subsection{Nyx Cosmology}
+\label{sec:nyx}
+Table~\ref{nyx_tab} lists all the Nyx \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:nyx_plot} shows the distribution of trajectory reconstruction error for each test.
+%
+\input{nyx_table.tex}
+%
+\textbf{Execution Time.} Across our 8 tests using the Nyx data set, Lagrangian$_{Local}$ computed a flow map up to 5.2x faster than the corresponding Lagrangian$_{Dist}$ flow map.
+%
+Additionally, Figure~\ref{fig:dataset_timings} shows the standard deviation is greater for the Lagrangian$_{Dist}$ tests and is caused by the larger number of particles exchanges between ranks for this data set.
+%
+
+\textbf{Reconstruction Accuracy.} As a consequence of a large number of particles being discarded by Lagrangian$_{Local}$, the accuracy of reconstruction is impacted by the longer storage intervals.
+%
+Although 7 of 8 tests show up to the third quartile reconstructing under 100\% of a GCS, the number of instances with a higher reconstruction error increases with the storage interval.
+%
+However, for shorter storage interval lengths (10, 20), the reconstruction quality is high for both data reduction factors considered. 
+%
+Lastly, Figure~\ref{fig:nyx_map} uses a heatmap to show the distribution of reconstruction accuracy across every interval. 
+% of a Nyx configuration.
+
+\input{nyx_plot.tex}
+\input{nyx_map.tex}
+
+\subsection{Jet Flow}
+\label{sec:jet}
+Table~\ref{jet_tab} lists all the Jet \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:jet_plot} shows the distribution of trajectory reconstruction error for each test.
+%
+
+\textbf{Execution Time.} For the Jet data set, Lagrangian$_{Local}$ computed a flow map up to 3.9x faster than the corresponding Lagrangian$_{Dist}$ flow map.
+%
+For this data set, we considered shorter storage intervals, and thus a smaller percentage of particles required particle exchange to continue trajectory integration.
+%
+However, Figure~\ref{fig:dataset_timings} shows the variability in the cost of communication as it is susceptible to network usage and bandwidth contention.
+%
+\input{jet_table.tex}
+
+\textbf{Reconstruction Accuracy.} The Jet data set presents an adversarial case for our proposed optimization of computing local flow maps.
+%
+The data set contains regions with high velocity magnitude.
+%
+Across the range of configurations in Figure~\ref{fig:jet_plot}, both the storage interval and the data reduction factor impact the reconstruction accuracy.
+%
+Further investigation into the distribution of T2 revealed that the longer storage interval resulted in several particles terminating in easy-to-reconstruct areas of the domain at the start of the simulation (most other configurations show particle termination only after cycle 30).
+%
+%
+The sparser sampling for other configurations with the same storage interval misses this effect.
+\input{jet_plot.tex}
+\input{jet_map.tex}
+
+\textbf{Impact of Varying Data Reduction Factor.} Figure~\ref{fig:jet_map} shows heatmaps comparing the distribution of reconstruction error across every interval.
+%
+Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
+%
+Further, the reconstruction of some discarded trajectories can be multiple cells away from the ground truth. 
+%
+%
+%Overall, based on the distribution of reconstruction accuracy, the probability of accurate reconstruction increases with more samples.
+
