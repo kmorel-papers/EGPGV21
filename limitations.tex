@@ -1,14 +1,15 @@
-Although the major focus of this work is scalability and the use of local Lagrangian flow maps, the benefit of being intrinsically scalable comes with certain limitations as shown in our quantitative evaluation.
+While the major focus of this work is scalability and the use of local Lagrangian flow maps, the benefits intrinsically scalable solution comes with certain limitations as shown in our quantitative evaluation.
 %
-First, particles advected by very high velocity, i.e., advected beyond the boundaries of spatially adjacent node domains during the storage interval, are poorly reconstructed.
+First, as observed for the Jet data set, particles advected by very high velocity, i.e., advected beyond the boundaries of spatially adjacent node domains during the storage interval, are poorly reconstructed.
 %
-In particular, we observe this for the Jet data set.
+%In particular, we observe this for the Jet data set.
 %
-Second, our evaluation as well as prior works have demonstrated that Lagrangian$_{Dist}$ can provide high accuracy while using a small number of samples, i.e., providing a significant data reduction (for example, 1:64 data reduction factor corresponds to a $>$~98\% compression).
+Second, our evaluation as well as prior works have demonstrated that Lagrangian$_{Dist}$ can provide high accuracy while using a small number of samples, i.e., providing a significant data reduction (for example, 1:64 data reduction factor corresponds to a $>$~98\% compression of time-varying vector data).
 %
 The Lagrangian$_{Local}$ strategy leverages this knowledge and discards particle trajectories in order to remain communication-free.
 %
-However, in Figure~\ref{fig:strongscaling} we see that although both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error, the error of Lagrangian$_{Local}$ increases faster as the data reduction factor or storage interval increases.
+However, in Figure~\ref{fig:strongscaling} we see that while both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error, the error of Lagrangian$_{Local}$ increases faster for the high data reduction factors or large storage intervals.
+%
 
 We discuss two solutions to these challenges.
 %
@@ -16,12 +17,10 @@ The first solution involves the adoption of communication with spatially adjacen
 %
 For example, the Los Alamos National Laboratory MPAS-O uses an integrated online Lagrangian analysis system that uses a combination of frequent local communication and infrequent global communication to perform particle exchange operations~\cite{VANSEBILLE201849}.
 %
-However, we are unaware of technical details or a study of this system and expect its performance would be dependent on the specific application, domain decomposition, rank placement, and synchronization.
+However, we are unaware of technical details or a study of this system and expect its performance would be dependent on the specific application (underlying vector field), domain decomposition, rank placement, and synchronization.
 %
-The second solution involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination location and time stored.
+The second solution involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
 %
-For example, an extension of variable duration variable placement Lagrangian trajectories sampling~\cite{sane2019interpolation} to distributed memory.
-%
-A flow map with arbitrary stop times, however, would require a novel post hoc interpolation scheme.
+A flow map with arbitrary termination times for particle trajectories, however, would require a novel post hoc interpolation scheme.
 %
 We believe the aforementioned limitations can be addressed via these solutions.

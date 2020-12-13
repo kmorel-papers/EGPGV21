@@ -67,7 +67,7 @@ We identify and list these differences in Table~\ref{table:differences}.
 
 The most significant challenge associated with distributed-memory particle advection is scalability.
 %
-The poor scalability is due to the large amount of communication required between processors as particles continue trajectory integration across node-specific domain boundaries.
+The poor scalability is due to the frequent and large amount of communication required between processors as particles continue trajectory integration across node-specific domain boundaries.
 %
 Most studies in this area have required particle exchange, but a few have used preprocessing or runtime operations to address scalability by limiting communication.
 %

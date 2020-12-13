@@ -1,6 +1,5 @@
 We organize our results into four subsections, with each subsection focusing on experiments using one data set.
 
-\input{weakscaling.tex}
 \subsection{Cloverleaf3D Simulation}
 \label{sec:clover}
 
@@ -39,6 +38,8 @@ However, this increase in particle advection cost is attributed to the differenc
 %We believe the performance of the kernel considering the parameters of cell size, step size, and vector field is worth future investigation.
 %
 Further, use of a faster particle advection kernel would result in greater speed-ups for Lagrangian$_{Local}$.
+\input{weakscaling.tex}
+\input{gpu_nodes.tex}
 
 \textbf{Varying GPUs/Ranks per Compute Node.}
 Since each CN on Summit has 6 GPUs a simulation can be configured in several ways.
@@ -62,7 +63,6 @@ Figure~\ref{fig:communication} shows the difference in communication costs per s
 The MPI communication cost shows a reduction when using 6 ranks versus 4 per CN, although our data points using 4 ranks per CN scales poorly as the number of CNs increases.
 %
 On-node MPI communication optimizations contribute to better performance when grouping a larger number of MPI ranks on each CN, but the communication cost of inter-node remains high in comparison to intra-node.
-\input{gpu_nodes.tex}
 
 %
 %Although these results inform computational performance, the specific configuration is determined by the simulation.
@@ -100,9 +100,11 @@ Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8
 %
 \input{strongscaling.tex}
 %
-Although multiphysics HPC simulations typically have hundreds of thousands of grid points per data block, we evaluate Lagrangian$_{Local}$ in situations where this is not the case.
+Although multiphysics HPC simulations typically have millions of grid points per rank and increase grid resolution as the number of ranks increases, we evaluate Lagrangian$_{Local}$ in situations where this is not the case and consider the outcome when the number of processes operating over a fixed grid increases.
 %
-Since the strategy is to discard trajectories exiting the rank-specific domain, this approach is susceptible to smaller low resolution blocks, longer storage intervals (i.e., integration times), and data reduction factor.
+%Although multiphysics HPC simulations typically have hundreds of thousands of grid points per data block, we evaluate Lagrangian$_{Local}$ in situations where this is not the case and the number of processes operating over a fixed grid increases .
+%
+Since the strategy is to discard trajectories exiting the rank-specific domain, this approach is susceptible to low resolution data blocks (i.e, sampling would use a small number of particles per rank) and longer storage intervals (i.e., integration times).
 %
 This \textbf{AE1} experiment measures the error of $1,000$ new pathlines generated for 800 cycles compared to the ground truth. 
 %
@@ -119,6 +121,7 @@ These results highlight the limitations of the Lagrangian$_{Local}$ technique as
 %
 %That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
 
+\input{eulerian_table.tex}
 \textbf{Comparison to Traditional Approach.}
 \textbf{AE2} compares Lagrangian$_{Local}$ to using an Eulerian representation with temporal subsampling.
 %
@@ -136,15 +139,15 @@ To compare accuracy, we reconstructed 100,000 randomly seeded pathlines for 600 
 Overall, Lagrangian$_{Local}$ is increasingly accurate (6x to 11x) compared to the Eulerian approach as the interval size increases, but requires less data storage.
 %
 These results align with findings in prior works~\cite{agranovsky2014improved, sane2018revisiting} that compared the use of Lagrangian representations to the traditional approach under sparse temporal settings.
-\input{eulerian_table.tex}
 
+\input{dataset_timings.tex}
 \subsection{ABC Flow}
 \label{sec:abc}
 
 Table~\ref{abc_tab} lists all the ABC \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:abc_plot} shows the distribution of trajectory reconstruction error for each test.
 %
-\input{abc_maps.tex}
 \input{abc_table.tex}
+\input{abc_plot.tex}
 
 \textbf{Execution Time.} Using 64 MPI ranks, each with 1 GPU, across 16 CNs, Lagrangian$_{Dist}$ requires up to 2.8x more execution time as Lagrangian$_{Local}$.
 %
@@ -152,8 +155,7 @@ Figure~\ref{fig:dataset_timings} shows particle advection and communication cost
 %
 Further, particle advection for up to 2M particles, i.e., 32k particles per GPU, can be performed in under 0.004 seconds per step for all data sets.
 %
-\input{dataset_timings.tex}
-\input{abc_plot.tex}
+\input{abc_maps.tex}
 
 \textbf{Reconstruction Accuracy.} Figure~\ref{fig:abc_plot} indicates the ABC data set shows shifts in reconstruction error distribution when varying the storage intervals and sampling resolution while remaining within similar ranges.
 %
@@ -175,7 +177,7 @@ Even for longer storage intervals, the error remains small, and discarded trajec
 Table~\ref{nyx_tab} lists all the Nyx \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:nyx_plot} shows the distribution of trajectory reconstruction error for each test.
 %
 \input{nyx_table.tex}
-%
+
 \textbf{Execution Time.} Across our 8 tests using the Nyx data set, Lagrangian$_{Local}$ computed a flow map up to 5.2x faster than the corresponding Lagrangian$_{Dist}$ flow map.
 %
 Additionally, Figure~\ref{fig:dataset_timings} shows the standard deviation is greater for the Lagrangian$_{Dist}$ tests and is caused by the larger number of particles exchanges between ranks for this data set.
@@ -187,7 +189,7 @@ Although 7 of 8 tests show up to the third quartile reconstructing under 100\% o
 %
 However, for shorter storage interval lengths (10, 20), the reconstruction quality is high for both data reduction factors considered. 
 %
-Lastly, Figure~\ref{fig:nyx_map} uses a heatmap to show the distribution of reconstruction accuracy across every interval. 
+Lastly, Figure~\ref{fig:nyx_map} uses a heatmap to show the distribution of error across every interval. 
 % of a Nyx configuration.
 
 \input{nyx_plot.tex}
@@ -197,6 +199,7 @@ Lastly, Figure~\ref{fig:nyx_map} uses a heatmap to show the distribution of reco
 \label{sec:jet}
 Table~\ref{jet_tab} lists all the Jet \textbf{Workflow2} test configurations, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:jet_plot} shows the distribution of trajectory reconstruction error for each test.
 %
+\input{jet_table.tex}
 
 \textbf{Execution Time.} For the Jet data set, Lagrangian$_{Local}$ computed a flow map up to 3.9x faster than the corresponding Lagrangian$_{Dist}$ flow map.
 %
@@ -204,7 +207,6 @@ For this data set, we considered shorter storage intervals, and thus a smaller p
 %
 However, Figure~\ref{fig:dataset_timings} shows the variability in the cost of communication as it is susceptible to network usage and bandwidth contention.
 %
-\input{jet_table.tex}
 
 \textbf{Reconstruction Accuracy.} The Jet data set presents an adversarial case for our proposed optimization of computing local flow maps.
 %
@@ -216,6 +218,10 @@ Further investigation into the distribution of T2 revealed that the longer stora
 %
 %
 The sparser sampling for other configurations with the same storage interval misses this effect.
+%
+Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
+%
+For example, T8 using 1:64 data reduction factor and a storage interval of 10, has a mean reconstruction of 150% of GCS.
 \input{jet_plot.tex}
 \input{jet_map.tex}
 
@@ -223,7 +229,6 @@ The sparser sampling for other configurations with the same storage interval mis
 %
 Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
 %
-Further, the reconstruction of some discarded trajectories can be multiple cells away from the ground truth. 
 %
 %
 %Overall, based on the distribution of reconstruction accuracy, the probability of accurate reconstruction increases with more samples.

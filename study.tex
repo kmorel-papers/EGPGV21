@@ -100,6 +100,8 @@ We measure accuracy in two contexts: (1) reconstruction of any discarded particl
 %We measure accuracy in two contexts: (1) to measure how accurately we can reconstruct any discarded particle trajectories, and (2) to measure the accuracy of full pathlines.  
 %
 In both cases, we measure Euclidean distances and represent error as a percentage of the grid cell side (GCS) to provide a perspective that is relative to the simulation domain.
+%
+If error is under 100\% of GCS it indicates a reconstructed particle trajectory end point is within one grid cell side of the ground truth.
 
 The first priority is understanding how accurately we can reconstruct the flow map. 
 %, i.e., all particle trajectories computed using Lagrangian$_{Dist}$.
@@ -114,7 +116,7 @@ Including these trajectories would skew the overall result.
 %
 Therefore, we present the percentage of both accurate and reconstructed particle trajectories for each test.
 %
-The reconstruction accuracy is presented using violin plots and heatmaps (2D histograms) to convey the distribution of error. 
+The reconstruction accuracy is presented using violin plots and heatmaps (2D histograms) to emphasize the distribution of error. 
 
 Second, for \textbf{AE1} and \textbf{AE2} we measure the accuracy of new pathlines.
 %

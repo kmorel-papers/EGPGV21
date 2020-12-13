@@ -1,14 +1,14 @@
-The computation of Lagrangian flow maps \textit{in situ} to enable \textit{post hoc} time-varying vector field analysis has recently become an active area of research. 
+The \textit{in situ} computation of Lagrangian flow maps to enable \textit{post hoc} time-varying vector field analysis has recently become an active area of research. 
 %
 However, current literature is largely limited to theoretical settings and lacks a solution to address scalability of the technique in distributed memory.
 %
 To improve scalability, we propose and quantitatively evaluate the benefits and limitations of a simple, yet novel, performance optimization.
 %
-Our proposed optimization is a communication-free model resulting in local Lagrangian flow maps, requiring no message passing or synchronization between processes, improving scalability, and thereby reducing overall execution time and alleviating the encumbrance placed on simulation codes from in situ processing.
+Our proposed optimization is a communication-free model resulting in local Lagrangian flow maps, requiring no message passing or synchronization between processes, intrinsically improving scalability, and thereby reducing overall execution time and alleviating the encumbrance placed on simulation codes from communication overheads.
 %
 To evaluate our approach, we compute Lagrangian flow maps for four time-varying simulation vector fields and investigate how execution time and reconstruction accuracy are impacted by the number of GPUs per compute node, the total number of compute nodes, particles per rank, and storage intervals. 
 %
 Our study consists of experiments computing Lagrangian flow maps consisting of up to 67M particle trajectories over 500 cycles and using as many as 2048 GPUs across 512 compute nodes.
 %
-In all, our study contributes a quantitative evaluation of a communication-free model as well as a scalability study of computing distributed Lagrangian flow maps at scale using in situ infrastructure on a modern supercomputer. 
+In all, our study contributes a quantitative evaluation of a communication-free model as well as a scalability study of computing distributed Lagrangian flow maps at scale using in situ infrastructure on a modern supercomputer.
 %

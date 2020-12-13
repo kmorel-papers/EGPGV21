@@ -38,7 +38,7 @@ After calculating and storing the flow maps, they can be interpolated to trace n
 \input{phases.tex}
 
 
-The Agranovsky et al.~\cite{agranovsky2014improved} study prompted several works in the areas of generation and interpolation of Lagrangian representations~\cite{chandler2015interpolation, sane2019interpolation, rapp2019void}, theoretical and empirical error analysis~\cite{bujack2015lagrangian, chandler2016analysis, hummel2016error, sane2018revisiting}, and use of reduced data sets for ocean modeling applications~\cite{envirvis.20171099}.
+The Agranovsky et al.~\cite{agranovsky2014improved} study prompted several works in the areas of generation and interpolation of Lagrangian representations~\cite{chandler2015interpolation, sane2019interpolation, rapp2019void, jakob2020fluid}, theoretical and empirical error analysis~\cite{bujack2015lagrangian, chandler2016analysis, hummel2016error, sane2018revisiting}, and use of reduced data sets for ocean modeling applications~\cite{envirvis.20171099}.
 %
 Although these works advance our understanding of the technique at a theoretical level, the scalability of the technique has not been previously addressed. 
 %
@@ -47,6 +47,7 @@ Although these works advance our understanding of the technique at a theoretical
 %
 In a recent comprehensive review of Lagrangian analysis~\cite{VANSEBILLE201849}, the primary challenges identified by the authors are (1) utilization of heterogenous computer architectures, (2) providing parallel performance and scalability, and (3) lack of an accessible API that allows integration with different simulations. 
 %
+In this paper, we address the challenge of scalability, as well as utilize a runtime in situ infrastructure for multiphysics HPC simulations and GPUs for Lagrangian flow map computation. 
 
 With this study, our contributions include:
 \begin{itemize}[leftmargin=*]
