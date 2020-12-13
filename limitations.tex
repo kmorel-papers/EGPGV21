@@ -1,6 +1,6 @@
-While the major focus of this work is scalability and the use of local Lagrangian flow maps, the benefits intrinsically scalable solution comes with certain limitations as shown in our quantitative evaluation.
+While the major focus of this work is scalability and the use of local Lagrangian flow maps, the benefits come with certain limitations as shown in our quantitative evaluation.
 %
-First, as observed for the Jet data set, particles advected by very high velocity, i.e., advected beyond the boundaries of spatially adjacent node domains during the storage interval, are poorly reconstructed.
+First, as observed for the Jet data set, a vector field with very high velocity might be poorly reconstructed.
 %
 %In particular, we observe this for the Jet data set.
 %
@@ -8,16 +8,19 @@ Second, our evaluation as well as prior works have demonstrated that Lagrangian$
 %
 The Lagrangian$_{Local}$ strategy leverages this knowledge and discards particle trajectories in order to remain communication-free.
 %
-However, in Figure~\ref{fig:strongscaling} we see that while both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error, the error of Lagrangian$_{Local}$ increases faster for the high data reduction factors or large storage intervals.
+However, this choice then limits the degree of data reduction.
+%
+While both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error (as shown in Figure~\ref{fig:strongscaling}, the error of Lagrangian$_{Local}$ increases faster when using a small number of samples or large storage intervals.
 %
 
-We discuss two solutions to these challenges.
+We briefly discuss two solutions to these challenges.
 %
-The first solution involves the adoption of communication with spatially adjacent ranks every cycle.
+The first solution involves the adoption of some communication with spatially adjacent ranks every cycle.
 %
-For example, the Los Alamos National Laboratory MPAS-O uses an integrated online Lagrangian analysis system that uses a combination of frequent local communication and infrequent global communication to perform particle exchange operations~\cite{VANSEBILLE201849}.
+Such a technique can be triggered if high velocity regions are detected.
+%For example, the Los Alamos National Laboratory MPAS-O uses an integrated online Lagrangian analysis system that uses a combination of frequent local communication and infrequent global communication to perform particle exchange operations~\cite{VANSEBILLE201849}.
 %
-However, we are unaware of technical details or a study of this system and expect its performance would be dependent on the specific application (underlying vector field), domain decomposition, rank placement, and synchronization.
+%However, we are unaware of technical details or a study of this system and expect its performance would be dependent on the specific application (underlying vector field), domain decomposition, rank placement, and synchronization.
 %
 The second solution involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
 %

@@ -154,7 +154,7 @@ Table~\ref{abc_tab} lists all the ABC \textbf{Workflow2} test configurations, Fi
 \input{abc_table.tex}
 \input{abc_plot.tex}
 
-\textbf{Execution Time.} Using 64 MPI ranks, each with 1 GPU, across 16 CNs, Lagrangian$_{Dist}$ requires up to 2.8x more execution time as Lagrangian$_{Local}$.
+\textbf{Execution Time.} Using 64 MPI ranks, each with 1 GPU, across 16 CNs, Lagrangian$_{Local}$ requires up to 2.8x less execution time as Lagrangian$_{Dist}$.
 %
 Figure~\ref{fig:dataset_timings} shows particle advection and communication costs are directly proportional to the particle count.
 %
@@ -162,16 +162,18 @@ Further, particle advection for up to 2M particles, i.e., 32k particles per GPU,
 %
 \input{abc_maps.tex}
 
-\textbf{Reconstruction Accuracy.} Figure~\ref{fig:abc_plot} indicates the ABC data set shows shifts in reconstruction error distribution when varying the storage intervals and sampling resolution while remaining within similar ranges.
+\textbf{Reconstruction Accuracy.} Figure~\ref{fig:abc_plot} violin plots indicate the ABC data set shows shifts in reconstruction error distribution when varying the storage intervals and sampling resolution while remaining within similar ranges.
 %
 Overall, the discarded trajectories from the ABC data set Lagrangian flow map can be reconstructed very accurately, with trajectories interpolated to the same grid cell as the ground truth.
 %
-Specifically, reconstructions are under 10\% of a GCS away from the ground truth.
+Specifically, for 9 of 9 tests the mean reconstruction error is between 2.5\% and 5\% of a GCS away from the ground truth.
 %
 
 \textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4, T5, and T6.
 %
-Comparing the heatmaps, the effect of increasing the storage interval is a larger number of particles are terminated in a single interval. 
+We show the absolute number of particles reconstructed for each storage interval for a more straightforward comparison between heatmaps.
+%
+Comparing the heatmaps, the effect of increasing the storage interval is a larger number of particles are terminated in a single interval and that reconstruction error increases. 
 %
 Further, the reconstruction error distribution matches the violin plots of T4, T5, and T6 in Figure~\ref{fig:abc_plot}. 
 %
@@ -188,13 +190,15 @@ Table~\ref{nyx_tab} lists all the Nyx \textbf{Workflow2} test configurations, Fi
 Additionally, Figure~\ref{fig:dataset_timings} shows the standard deviation is greater for the Lagrangian$_{Dist}$ tests and is caused by the larger number of particles exchanges between ranks for this data set.
 %
 
-\textbf{Reconstruction Accuracy.} As a consequence of a large number of particles being discarded by Lagrangian$_{Local}$, the accuracy of reconstruction is impacted by the longer storage intervals.
+\textbf{Reconstruction Accuracy.} As a consequence of a large number of particles being discarded by Lagrangian$_{Local}$, the accuracy of reconstruction is impacted for tests with longer storage intervals.
 %
-Although 7 of 8 tests show up to the third quartile reconstructing under 100\% of a GCS, the number of instances with a higher reconstruction error increases with the storage interval.
+7 of 8 tests show up to the third quartile reconstructing under 100\% of a GCS. 
 %
-However, for shorter storage interval lengths (10, 20), the reconstruction quality is high for both data reduction factors considered. 
+Comparing tests T3 and T4 (1:1 data reduction factor) to tests T7 and T8 (1:8 data reduction factor), although T3 and T4 discard a greater percentage of samples, they remain more accurate due to the overall number of particles used to sample the domain.
 %
-Lastly, Figure~\ref{fig:nyx_map} uses a heatmap to show the distribution of error across every interval. 
+For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction quality is high for both data reduction factors considered. 
+%
+Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error across every interval and temporal patterns of communication during the simulation. 
 % of a Nyx configuration.
 
 \input{nyx_plot.tex}
@@ -212,28 +216,40 @@ For this data set, we considered shorter storage intervals, and thus a smaller p
 %
 However, Figure~\ref{fig:dataset_timings} shows the variability in the cost of communication as it is susceptible to network usage and bandwidth contention.
 %
+A single outlier Lagrangian$_{Local}$ test shows a higher computation cost. 
 
+\input{jet_plot.tex}
+\input{jet_map.tex}
 \textbf{Reconstruction Accuracy.} The Jet data set presents an adversarial case for our proposed optimization of computing local flow maps.
 %
 The data set contains regions with high velocity magnitude.
 %
 Across the range of configurations in Figure~\ref{fig:jet_plot}, both the storage interval and the data reduction factor impact the reconstruction accuracy.
 %
+6 of 9 tests have a mean reconstruction error under 100% of GCS. 
+%
 Further investigation into the distribution of T2 revealed that the longer storage interval resulted in several particles terminating in easy-to-reconstruct areas of the domain at the start of the simulation (most other configurations show particle termination only after cycle 30).
 %
 %
 The sparser sampling for other configurations with the same storage interval misses this effect.
 %
-Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
+%Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
 %
-For example, T8 using 1:64 data reduction factor and a storage interval of 10, has a mean reconstruction of 150% of GCS.
-\input{jet_plot.tex}
-\input{jet_map.tex}
+%For example, T8 using 1:64 data reduction factor and a storage interval of 10, has a mean reconstruction of 150% of GCS.
 
-\textbf{Impact of Varying Data Reduction Factor.} Figure~\ref{fig:jet_map} shows heatmaps comparing the distribution of reconstruction error across every interval.
+\textbf{Impact of Varying Data Reduction Factor.} Figure~\ref{fig:jet_map} compares the distribution of reconstruction error as the data reduction factor increases. 
 %
-Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
+Each cell in the heatmap shows a percentage of particles to enable comparison between tests.
 %
+For test T1 using a 1:1 sampling, reconstruction accuracy is high and a larger percentage of particles are reconstructed with error under 100\% of GCS.
+%
+As the number of particles used to sample the domain reduces a higher percentage of particles are reconstructed multiple cells away from the ground truth. 
+%
+For example, in Figure~\ref{fig:jet_7} test T7 uses 1:64 data reduction factor and there are more red/orange cells with higher error during the later stages of the simulation. 
+%
+%Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
+%
+%Overall, as the number of particles used to sample the domain reduces the mean reconstruction error increases, with tests using a longer storage interval showing higher error.
 %
 %
 %Overall, based on the distribution of reconstruction accuracy, the probability of accurate reconstruction increases with more samples.
