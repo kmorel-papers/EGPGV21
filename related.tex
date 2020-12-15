@@ -55,7 +55,7 @@ Execution time and memory are limited resources when operating in situ, so the t
 
 \textbf{Distributed-Memory Particle Advection.}
 %
-Historically, distributed-memory particle advection algorithms have been proposed for post hoc analysis.
+Distributed-memory particle advection algorithms have historically been proposed for post hoc analysis.
 %Historically, distributed-memory particle advection has been performed for post hoc analysis.
 %
 We refer readers to comprehensive surveys~\cite{PeterkaRNLSKH11,zhang2018survey} on this topic for steady and unsteady vector fields in multinode settings.
@@ -67,11 +67,11 @@ We identify and list these differences in Table~\ref{table:differences}.
 
 The most significant challenge associated with distributed-memory particle advection is scalability.
 %
-The poor scalability is due to the frequent and large amount of communication required between processors as particles continue trajectory integration across node-specific domain boundaries.
+The poor scalability is due to the frequent and large amount of communication required between processors as particles continue trajectory integration across rank domain boundaries.
 %
 Most studies in this area have required particle exchange, but a few have used preprocessing or runtime operations to address scalability by limiting communication.
 %
-Notably, Chen et al.~\cite{ChenXLS12, ChenS13} and Liao et al.~\cite{Liao2019ScalablePF} modify the data layout as a preprocess to propose parallelize-over-data techniques.
+Notably, Chen et al.~\cite{ChenXLS12, ChenS13} and Liao et al.~\cite{Liao2019ScalablePF} modify the data layout as a preprocessing step to propose parallelize-over-data techniques.
 %
 %To calculate steady state LIC of unstructured meshes, Liao et al.~\cite{Liao2019ScalablePF} first preprocess the data to group cells on CNs and then limit particle advection to within a cell to eliminate communication.
 %
@@ -87,11 +87,14 @@ Considering the constraints on memory and execution time in situ, and the time-v
 %Assuming an in situ routine can access only a single time-slice of the simulation at a time and operates on a simulation-determined data layout, these strategies are not applicable or viable after considering memory and execution time constraints, or the time-varying nature of the vector field.
 %
 
-In this paper, we first evaluate the computation of a Lagrangian flow map at scale when using communication to perform particle exchange. 
+In this paper, we consider a communication-free model for extracting local Lagrangian flow maps. 
 %
-Next, we consider a communication-free model for extracting local Lagrangian flow maps and evaluate the performance benefits and reconstruction accuracy of this approach.
+We compare this approach with the traditional computation of a Lagrangian flow map, which does incur communication costs.
 %
-Based on our understanding of existing research in this area, in situ constraints, and practical temporal storage intervals, we believe this performance optimization is viable for a sampling strategy, and most importantly, intrinsically enables scalability to a large number of processors.
+Our comparisons are at scale and evaluate the respective performance benefits and reconstruction accuracy of the approach.
+%Next, we consider a communication-free model for extracting local Lagrangian flow maps and evaluate the performance benefits and reconstruction accuracy of this approach.
+%
+Based on our understanding of existing research in this area, in situ constraints, and practical temporal storage intervals, we believe the communication-free model is viable for a sampling strategy, and most importantly, intrinsically enables scalability to a large number of processors.
 
 %
 %

@@ -1,29 +1,45 @@
-While the major focus of this work is scalability and the use of local Lagrangian flow maps, the benefits come with certain limitations as shown in our quantitative evaluation.
+While scalability is the major benefit of local Lagrangian flow maps, this benefit comes with certain limitations as shown in our quantitative evaluation.
 %
 First, as observed for the Jet data set, a vector field with very high velocity might be poorly reconstructed.
 %
 %In particular, we observe this for the Jet data set.
 %
-Second, our evaluation as well as prior works have demonstrated that Lagrangian$_{Dist}$ can provide high accuracy while using a small number of samples, i.e., providing a significant data reduction (for example, 1:64 data reduction factor corresponds to a $>$~98\% compression of time-varying vector data).
+Second, Lagrangian$_{Local}$ reconstruction accuracy can be adversely affected if the storage interval is too large or if too few samples are stored.
 %
-The Lagrangian$_{Local}$ strategy leverages this knowledge and discards particle trajectories in order to remain communication-free.
+This limits the potential amount of data reduction in comparison to Lagrangian$_{Dist}$.
 %
-However, this choice then limits the degree of data reduction.
+%is effective for several practical configurations, the accuracy suffers when a large percentage of particles 
+%is less accurate than Lagrangian$_{Dist}$ when the storage interval is large or the number of particles used to sample the domain is small, i.e., it limits the degree of data reduction.
 %
-While both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error (as shown in Figure~\ref{fig:strongscaling}, the error of Lagrangian$_{Local}$ increases faster when using a small number of samples or large storage intervals.
+%Prior works have demonstrated that Lagrangian$_{Dist}$ can provide high accuracy while using a small number of samples. 
+%, i.e., providing a significant data reduction (for example, 1:64 data reduction factor corresponds to a $>$98\% compression of time-varying vector data).
+%
+%The Lagrangian$_{Local}$ strategy leverages this knowledge and discards particle trajectories in order to remain communication-free.
+%
+%However, this strategy is only effective as long as Lagrangian$_{Local}$ still stores a sufficient number of samples. 
+%
+While both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error (as shown in Figure~\ref{fig:strongscaling}), the error of Lagrangian$_{Local}$ increases faster when using a small number of samples or large storage intervals.
 %
 
 We briefly discuss two solutions to these challenges.
 %
-The first solution involves the adoption of some communication with spatially adjacent ranks every cycle.
+The first potential solution is to detect high velocity regions, and adapt execution to adopt some local communication with spatially adjacent ranks.
 %
-Such a technique can be triggered if high velocity regions are detected.
+%Infrequent global communication would then also be required to exchange particles before storing to disk.
+%Such a technique can be triggered if high velocity regions are detected.
 %For example, the Los Alamos National Laboratory MPAS-O uses an integrated online Lagrangian analysis system that uses a combination of frequent local communication and infrequent global communication to perform particle exchange operations~\cite{VANSEBILLE201849}.
 %
 %However, we are unaware of technical details or a study of this system and expect its performance would be dependent on the specific application (underlying vector field), domain decomposition, rank placement, and synchronization.
 %
-The second solution involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
+The second solution is to stop discarding trajectories that hit the domain boundary, and instead utilize them for reconstruction. 
 %
-A flow map with arbitrary termination times for particle trajectories, however, would require a novel post hoc interpolation scheme.
+In this case, Lagrangian analysis could remain communication-free but would need enhancements not only for how to represent trajectories (termination location and time, number of points stored along pathline), but also would require a novel post hoc interpolation scheme.
 %
-We believe the aforementioned limitations can be addressed via these solutions.
+%In this case, Lagrangian analysis would remain communication-free but would need enhancements not only for how to represent trajectories that end abruptly (location, time, number of points along the curve, etc.) involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
+%
+%A flow map with arbitrary termination times for particle trajectories, however, would require a novel post hoc interpolation scheme.
+%
+We believe these limitations should be pursued for future work. 
+%
+That said, we believe a significant number of use cases for Lagrangian analysis in practice today would not encounter these limitations. 
+% aforementioned limitations can be addressed via these solutions.

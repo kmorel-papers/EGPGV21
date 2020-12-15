@@ -1,6 +1,17 @@
-Based on the in situ system classification in~\cite{childs2020istp}, our system would classify as one with a dedicated API integration, on node proximity, direct access, a time division of execution, automatic operation, and a derived output type.
+This section contains four parts.
+%
+Section~\ref{sec:insituinfrastructure} describes the in situ infrastructure for our approaches.
+%
+The next two sections describe the two Lagrangian flow map extraction approaches we consider:
+the traditional approach~(~\ref{sec:baseline}) and a new communication-free approach~(\ref{sec:local}).
+Finally, \ref{sec:posthoc} describes how post hoc reconstruction is performed, which applies to both approaches.
+%
+Further, based on the in situ system classification in~\cite{childs2020istp}, the Lagrangian flow map extraction system would classify as one with a dedicated API integration, on node proximity, direct access, a time division of execution, automatic operation, and a derived output type.
 
+%\vspace{-2mm}
 \subsection{In Situ Infrastructure}
+\label{sec:insituinfrastructure}
+\input{insituinfrastructure.tex}
 Our study uses the Ascent in situ infrastructure~\cite{Larsen2017Ascent}.
 %
 The Ascent API can be used to integrate with a simulation code and access various in situ analytics capabilities.
@@ -26,10 +37,11 @@ The rank-specific Lagrangian filter uses the simulation vector field data to adv
 Creating an instance of Ascent, specifying parameters, and invoking the Lagrangian filter requires only 20 lines of code (C++) and fewer if a JSON input file is used.
 
 
-\input{insituinfrastructure.tex}
 \input{notional_examples.tex}
 
-\subsection{Computation of a Lagrangian Flow Map}
+%\vspace{-2mm}
+\subsection{Traditional Computation of Lagrangian Flow Maps}
+\label{sec:baseline}
 Conceptually, a Lagrangian representation encodes the behavior of a time-varying flow using particle trajectories.
 %
 Given the early nature of investigations into the use of Lagrangian flow maps, the best ways to seed, represent in memory, communicate, and store flow maps are open questions. 
@@ -38,7 +50,8 @@ Given the early nature of investigations into the use of Lagrangian flow maps, t
 %
 Section~\ref{sec:related} noted three prior sampling strategies; however, none of these were evaluated at scale.
 %
-As a baseline, our work implements the technique described by Agranovsky et al.~\cite{agranovsky2014improved} with a modification to the storage format. 
+As a baseline, our work implements the technique described by Agranovsky et al.~\cite{agranovsky2014improved}. 
+% with a modification to the storage format. 
 %
 We refer to this implementation as Lagrangian$_{Dist}$.
 
@@ -47,7 +60,7 @@ For Lagrangian$_{Dist}$, we define the overall strategy for flow map computation
 \begin{itemize}[leftmargin=*]
 \item\textbf{Sampling:} For each data block, seeds are placed along a uniform grid. As particles are advected, they may diverge or cluster. 
 %
-To maintain domain coverage, particles are terminated after a fixed number of cycles, i.e., storage interval, and their end locations are saved, followed by a new set of particles uniformly seeded at the same starting locations.
+To maintain domain coverage, particles are terminated after a fixed number of cycles, i.e., storage interval, and their end locations are saved, followed by a new set of particles uniformly seeded at the original starting locations.
 %
 Thus, sets of temporally nonoverlapping particle trajectories are calculated that span the full duration of the simulation.
 %
@@ -72,7 +85,7 @@ In our implementation, we store the end location and a Boolean indicating validi
 %From a performance perspective, 
 %Our focus in this work is the execution time for computing a Lagrangian flow map.
 %
-The particle advection workload and communication costs primarily contribute to execution time.
+The particle advection workload and interprocess communication influence the execution time.
 %
 %Performing an advection step involves transferring the current vector field slice to GPU memory and invoking the advection kernel on each cycle.
 %
@@ -86,7 +99,9 @@ Finally, we consider the minimal encumbrance that can be placed on memory for th
 %
 %a single vector field time-slice at any given time.
 %
-\subsection{Computing Local Lagrangian Flow Maps}
+%\vspace{-2mm}
+\subsection{Computation of Local Lagrangian Flow Maps}
+\label{sec:local}
 %As mentioned in the previous section, the two main costs are (1) an advection step and (2) communication.
 %
 %Performing an advection step involves transferring the current vector field slice to GPU memory and invoking the advection kernel on each cycle.
@@ -101,7 +116,7 @@ With this work, we propose an optimization to address the increasing cost of com
 %
 Our strategy is a simple, yet novel and scalable, approach: skip all the communication and compute only local Lagrangian flow maps in situ. 
 %
-We define our overall strategy as follows:
+We refer to this implementation as Lagrangian$_{Local}$ and define the overall strategy as follows:
 \begin{itemize}[leftmargin=*]
 \item\textbf{Sampling:} Similar to Lagrangian$_{Dist}$, we use a uniform seed placement and a fixed storage interval.
 %
@@ -125,7 +140,7 @@ The diagram shows three particle trajectories (P$_{1}$, P$_{2}$, P$_{3}$) starti
 %
 Two of the particle trajectories (P$_{1}$, P$_{3}$) remain in their domain until t$_{end}$, i.e., for all cycles of the storage interval, and one particle (P$_{2}$) reaches the domain boundary at t$_{int}$.
 %
-During post hoc reconstruction, to use the information of P$_{2}$ to transport a new particle from t$_{start}$ to t$_{int}$ requires knowing the location of neighboring particles (P$_{1}$, P$_{3}$) at t$_{int}$.
+During post hoc reconstruction, using the information of P$_{2}$ to transport a new particle from t$_{start}$ to t$_{int}$ requires knowing the location of neighboring particles (P$_{1}$, P$_{3}$) at t$_{int}$.
 %
 Only the start and end locations of the particles are known in our case, so this approach would require linearly interpolating (depicted using the dotted brown line) the locations of the neighboring particles at t$_{int}$.
 %
@@ -135,28 +150,29 @@ However, these interpolated locations are often errorneous (red particles).
 %
 %We discuss a potential strategy to address this in Section~\ref{sec:discussion}.
 
-The benefits of computing local Lagrangian flow maps are less execution time and improved scalability characteristics. 
+The benefits of computing local Lagrangian flow maps are reduced execution time and improved scalability characteristics. 
 %
-Further, for storage intervals in practice, we believe only a small percentage of particles will be discarded.
+Further, for storage intervals that are used in practice, we hypothesize only a small percentage of particles will be discarded.
 %
 However, the loss of information in the form of discarded particle trajectories could reduce the quality of flow reconstruction.
 %
-Discarded trajectories can be interpolated using valid trajectories from adjacent processors during post hoc analysis.
+Discarded or new trajectories can be interpolated using valid trajectories from adjacent processors during post hoc analysis.
 %
 Our study evaluates this tradeoff.
 %
-
-Lastly, we believe this performance optimization can be triggered, i.e., communication can be turned on/off based on information. 
+Lastly, we believe this performance optimization could be applied adaptively, i.e., communication can be turned on/off when appropriate.
 %
-That said, we view this study as essential to inform such heuristic design. % and leave it for future work.
+Our study assumes an ``always off'' approach, which we view as invaluable for future adaptive designs.
+%That said, we view this study as essential to inform such heuristic design. % and leave it for future work.
 %
-In this paper, we treat the computation of local Lagrangian flow maps as a separate technique to understand behavior across every stage of a simulation run.
+%In this paper, we treat the computation of local Lagrangian flow maps as a separate technique to understand behavior across every stage of a simulation run.
 %
-We refer to this implementation as Lagrangian$_{Local}$.
 %We refer to our implementation of local Lagrangian flow maps as Lagrangian$_{Local}$.
 
+%\vspace{-2mm}
 \subsection{Post Hoc Flow Field Reconstruction}
-Our study uses a Lagrangian-based advection scheme similar to prior work~\cite{agranovsky2014improved, sane2018revisiting, sane2019interpolation}.
+\label{sec:posthoc}
+We use a Lagrangian-based advection scheme similar to prior work~\cite{agranovsky2014improved, sane2018revisiting, sane2019interpolation}.
 %
 New particles can interpolate temporally nonoverlapping sets of particle trajectories, with an advection step advancing the particle forward in time by the length of the storage interval.
 %

@@ -6,11 +6,11 @@ In situ processing involves coupling with the simulation code and operating on d
 % in either a tightly-coupled (utilize same resources) or loosely-coupled (distinct resources) setting.
 %In situ processing involves operating on simulation data as it is generated in either a tightly-coupled (utilize same resources) or loosely-coupled (distinct resources) setting.
 %
-The primary benefit is access to the full spatiotemporal resolution of the simulation data in memory.
+A benefit of operating in situ is access to the full spatiotemporal resolution of the simulation data in memory.
 %
 However, in situ analysis tasks operate in constrained environments and are afforded limited execution time and memory.
 %
-Further, these analysis tasks must scale effectively since simulations execute across hundreds of compute nodes~(CNs).
+Further, these analysis tasks often have execution time constraints and must scale effectively since simulations execute across hundreds of compute nodes~(CNs).
 %
 %Thus, investigating the overhead in situ processing introduces is critical.
 %
@@ -32,13 +32,13 @@ Figure~\ref{fig:phases} illustrates the approach.
 %
 The Lagrangian flow maps (denoted by F$X$$\rightarrow$$Y$ in Figure~\ref{fig:phases}) are computed in situ using every cycle of a simulation, i.e., the full temporal resolution.
 %
-After calculating and storing the flow maps, they can be interpolated to trace new particle trajectories for post hoc analysis tasks.
+After calculating and storing the flow maps, post hoc analysis tasks can use the flow maps to interpolate new particle trajectories.
 %
 %
 \input{phases.tex}
 
 
-The Agranovsky et al.~\cite{agranovsky2014improved} study prompted several works in the areas of generation and interpolation of Lagrangian representations~\cite{chandler2015interpolation, sane2019interpolation, rapp2019void, jakob2020fluid}, theoretical and empirical error analysis~\cite{bujack2015lagrangian, chandler2016analysis, hummel2016error, sane2018revisiting}, and use of reduced data sets for ocean modeling applications~\cite{envirvis.20171099}.
+The Agranovsky et al.~\cite{agranovsky2014improved} study has been followed by several works in the areas of generation and interpolation of Lagrangian representations~\cite{chandler2015interpolation, sane2019interpolation, rapp2019void, jakob2020fluid}, theoretical and empirical error analysis~\cite{bujack2015lagrangian, chandler2016analysis, hummel2016error, sane2018revisiting}, and use of reduced data sets for ocean modeling applications~\cite{envirvis.20171099}.
 %
 Although these works advance our understanding of the technique at a theoretical level, the scalability of the technique has not been previously addressed. 
 %

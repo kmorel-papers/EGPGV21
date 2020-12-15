@@ -3,8 +3,8 @@
 % D.Fellner, v2.03, Dec 14, 2018
 
 
-\title[In Situ Parallel Computation of Local Lagrangian Flow Maps]%
-      {In Situ Parallel Computation of Local Lagrangian Flow Maps}
+\title[Scalable In Situ Computation of Lagrangian Representations via Local Flow Maps]%
+      {Scalable In Situ Computation of Lagrangian Representations via Local Flow Maps}
 
 % for anonymous conference submission please enter your SUBMISSION ID
 % instead of the author's name (and leave the affiliation blank) !!
