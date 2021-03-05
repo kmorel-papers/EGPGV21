@@ -21,7 +21,7 @@ The Eulerian approach is susceptible to error due to high numerical approximatio
 %
 In comparison, the Lagrangian approach benefits from access to the complete spatiotemporal resolution to compute flow maps.
 %
-Multiple works have advanced this research area by considering in situ sampling or extraction strategies~\cite{sane2019interpolation, rapp2019void}, and post hoc reconstruction and theoretical/empirical error analysis using the flow map as input~\cite{hlawatsch2011hierarchical, bujack2015lagrangian, chandler2015interpolation, chandler2016analysis, hummel2016error, sane2018revisiting, sane2019interpolation}.
+Multiple works have advanced this research area by considering in situ sampling or extraction strategies~\cite{sane2019interpolation, rapp2019void}, and post hoc reconstruction and theoretical/empirical error analysis using the flow map as input~\cite{hlawatsch2011hierarchical, bujack2015lagrangian, chandler2015interpolation, chandler2016analysis, hummel2016error, sane2018revisiting, sane2019interpolation, rapp2019void, jakob2020fluid}.
 
 In this paper, we focus on the first phase, i.e., in situ computation of a Lagrangian flow map.
 %
@@ -60,7 +60,7 @@ Distributed-memory particle advection algorithms have historically been proposed
 %
 We refer readers to comprehensive surveys~\cite{PeterkaRNLSKH11,zhang2018survey} on this topic for steady and unsteady vector fields in multinode settings.
 %
-However, the existing post hoc solutions are not directly applicable due to different constraints and requirements when computing a Lagrangian flow map in situ.
+However, the existing post hoc solutions are not directly applicable due to different constraints and requirements of computing a Lagrangian flow map in situ.
 %However, performing in situ distributed-memory particle advection to compute a Lagrangian flow map has constraints and requirements different to the post hoc use case.
 %
 We identify and list these differences in Table~\ref{table:differences}.
@@ -81,7 +81,7 @@ Lastly, as an advection acceleration strategy, Bleile et al.~\cite{bleile2017acc
 %
 However, this technique is only applicable for post hoc steady state vector field analysis.
 %
-Considering the constraints on memory and execution time in situ, and the time-varying nature of the data, these strategies are either not applicable or viable. 
+Considering the constraints on memory and execution time in situ, and the time-varying nature of the data, existing strategies are either not applicable or viable. 
 %
 %Assuming an in situ routine can access only a single time-slice of the simulation at a time and operates on a simulation-determined data layout, these strategies are not applicable or viable after considering memory and execution time constraints, or the time-varying nature of the vector field.
 %Assuming an in situ routine can access only a single time-slice of the simulation at a time and operates on a simulation-determined data layout, these strategies are not applicable or viable after considering memory and execution time constraints, or the time-varying nature of the vector field.

@@ -25,12 +25,15 @@ Lagrangian analysis is a powerful tool to explore time-varying vector fields gen
 %
 The notion of calculating a Lagrangian flow map, i.e., sets of particle trajectories, for an ocean modeling simulation ``online" for ``offline'' exploration was first proposed by Vries et al.~\cite{vries2001calculating} two decades ago.
 %
-More recently, Agranovsky et al.~\cite{agranovsky2014improved} evaluated reduced Lagrangian representations of time-varying vector fields and showed significantly improved accuracy-storage propositions for exploration compared to the traditional Eulerian technique under sparse temporal settings. 
+More recently, compared to the traditional Eulerian technique under sparse temporal settings, Agranovsky et al.~\cite{agranovsky2014improved} evaluated reduced Lagrangian representations of time-varying vector fields and showed significantly improved accuracy-storage propositions for exploration. 
+%compared to the traditional Eulerian technique under sparse temporal settings. 
 %
 %The Lagrangian representation consists of particle trajectories that are computed using every cycle of a simulation. 
 Figure~\ref{fig:phases} illustrates the approach.
 %
-The Lagrangian flow maps (denoted by F$X$$\rightarrow$$Y$ in Figure~\ref{fig:phases}) are computed in situ using every cycle of a simulation, i.e., the full temporal resolution.
+The Lagrangian flow maps 
+%(denoted by F$X$$\rightarrow$$Y$ in Figure~\ref{fig:phases}) 
+are computed in situ using every cycle of a simulation, i.e., the full temporal resolution.
 %
 After calculating and storing the flow maps, post hoc analysis tasks can use the flow maps to interpolate new particle trajectories.
 %
