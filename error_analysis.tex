@@ -1,6 +1,6 @@
 %%\renewcommand{\baselinestretch}{2}
-\setlength{\abovedisplayskip}{0pt}
-\setlength{\belowdisplayskip}{0pt}
+%\setlength{\abovedisplayskip}{0pt}
+%\setlength{\belowdisplayskip}{0pt}
 %
 Although our main contribution is a quantitative empirical evaluation, for generality, this section provides a theoretical error analysis of our strategy to compute local Lagrangian flow maps.
 %
@@ -55,7 +55,7 @@ e_{n}\leq\frac {d^2}8(t_n-t_0) h_x^2\max_{\tau\in[t_0,t_n]}\max_{\zeta\in\mathbb
 \end{equation}
 \end{footnotesize}
 %
-with dimension $d$, start time $t_0$, end time $t_n$, spatial Lipschitz constant $L$, Hessian $H$ of the temporal derivative of the flow map $\dot F$, and spatial distance $h_x$ between the basis flows.
+with dimension $d$, start time $t_0$, end time $t_n$, spatial Lipschitz constant $L$, Hessian $H$ of the temporal derivative of the flow map $\dot F$, and spatial distance $h_x$ between the flow map trajectories.
 %
 As a result, the interpolation error is $O(h_x^2)$ if the flow map has bounded second derivatives in space and first derivatives in time, which is a reasonable assumption for a differentiable vector field, because the solutions of an initial value problem depend smoothly on the initial conditions and time~\cite{hartman1973ordinary}.
 %

@@ -101,11 +101,10 @@ Figure~\ref{fig:clover_map} uses a heatmap for reconstruction accuracy across ev
 Measuring reconstruction accuracy for individual intervals could provide insight into the suitability to compute local Lagrangian flow maps versus incur communication costs to retain all particles trajectories.
 %
 %This concept can extend to consider spatial patterns as well. 
-
+%
 \input{clover_plot.tex}
 \input{clover_map.tex}
-
-
+%
 Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8 data reduction factor, the complete Lagrangian flow map was reconstructed accurately (under 100\% of GCS) while providing speed-ups of 2x-4x for the Cloverleaf3D data set.
 
 %\vspace{-2mm}
@@ -115,7 +114,7 @@ Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8
 %
 Multiphysics HPC simulations typically have millions of grid points per rank and increase grid resolution as the number of ranks increases. 
 %
-To identify limitations, we evaluated Lagrangian$_{Local}$ in situations where this was not the case, and considered the outcome when the number of processes operating over a fixed grid size increased.
+To identify limitations, we evaluated Lagrangian$_{Local}$ in situations where this was not the case, i.e., when the number of processes operating over a fixed grid size increased.
 %
 %Although multiphysics HPC simulations typically have hundreds of thousands of grid points per data block, we evaluate Lagrangian$_{Local}$ in situations where this is not the case and the number of processes operating over a fixed grid increases .
 %
@@ -138,8 +137,8 @@ These results highlight the limitations of the Lagrangian$_{Local}$ technique as
 %That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
 
 %\vspace{-2mm}
-\subsubsection{C-II Results} 
 \input{eulerian_table.tex}
+\subsubsection{C-II Results} 
 Here, we compared Lagrangian$_{Local}$ to using an Eulerian representation with temporal subsampling.
 %
 Table~\ref{clover_eul_table} shows the results of \textbf{C-II}.

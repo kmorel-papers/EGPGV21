@@ -88,7 +88,7 @@ To simplify comparisons, we excluded cycles at the end of a storage interval.
 These cycles included a communication cost incurred by Lagrangian$_{Dist}$ to return all particles to the respective origin nodes. 
 %and an I/O cost to write data to disk.
 %
-In this paper, we do not analyze the parallel I/O times, and consider I/O optimization methods to be beyond the scope of this work.
+\fix{In this paper, we do not analyze the parallel I/O times because (1) I/O times on supercomputers can be highly variable and lead to difficult interpretations, (2) infrequently performed I/O write times for our tests were less than the corresponding advection cost for a single step, and (3) local flow maps consistently led to fewer bytes stored, meaning we would expect I/O costs to not increase.}
 
 For post hoc reconstruction, a Delaunay triangulation is performed using CGAL~\cite{2020cgal} on a single-node workstation.
 %

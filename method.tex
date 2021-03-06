@@ -4,14 +4,16 @@ Section~\ref{sec:insituinfrastructure} describes the in situ infrastructure for 
 %
 The next two sections describe the two Lagrangian flow map extraction approaches:
 the traditional approach~(\ref{sec:baseline}) and a new communication-free approach~(\ref{sec:local}).
+%
 Section~\ref{sec:posthoc} describes how post hoc reconstruction, which applies to both approaches, is performed.
+%
+\fix{Figures~\ref{fig:dist_1},~\ref{fig:dist_2},~\ref{fig:local_1}, and~\ref{fig:local_2} provide notional examples to compare both approaches.}
 %
 Further, based on the in situ system classification in~\cite{childs2020istp}, the Lagrangian flow map extraction system is classified as one with a dedicated API integration, on node proximity, direct access, a time division of execution, automatic operation, and a derived output type.
 
 %\vspace{-2mm}
 \subsection{In Situ Infrastructure}
 \label{sec:insituinfrastructure}
-\input{insituinfrastructure.tex}
 Our study used the Ascent in situ infrastructure~\cite{Larsen2017Ascent}.
 %
 The Ascent API can be used to integrate with a simulation code and access various in situ analytics capabilities.
@@ -35,6 +37,7 @@ Ascent is invoked every cycle of the simulation, and it consequently invoked the
 The rank-specific Lagrangian filter used the simulation vector field data to advect particles every cycle, and triggered the storage of trajectories that comprise the Lagrangian flow map. 
 %
 %Creating an instance of Ascent, specifying parameters, and invoking the Lagrangian filter requires only 20 lines of code (C++) and fewer if a JSON input file is used.
+\input{insituinfrastructure.tex}
 
 
 \input{notional_examples.tex}
@@ -85,18 +88,18 @@ In our implementation, we stored the end location and a Boolean indicating valid
 %From a performance perspective, 
 %Our focus in this work is the execution time for computing a Lagrangian flow map.
 %
-\fix{Is this paragraph needed? The particle advection workload and interprocess communication impact the execution time.
-%
-%Performing an advection step involves transferring the current vector field slice to GPU memory and invoking the advection kernel on each cycle.
-%
-The cost of particle advection depends on the data set, number of particles that each GPU is operating on, and the number of GPUs sharing memory on a CN.
-%
-Communication involves exchanging particle information and synchronization. 
-%
-The cost of communication varies based on the number of CNs, the number of total ranks, rank distribution across CNs, and the number of particles exchanged.
-%
-Finally, we considered the minimal encumbrance that can be placed on runtime memory for this technique: storing only current location and validity, and accessing only the vector field needed for a single step at any given time.}
-%
+%\fix{Is this paragraph needed? The particle advection workload and interprocess communication impact the execution time.
+%%
+%%Performing an advection step involves transferring the current vector field slice to GPU memory and invoking the advection kernel on each cycle.
+%%
+%The cost of particle advection depends on the data set, number of particles that each GPU is operating on, and the number of GPUs sharing memory on a CN.
+%%
+%Communication involves exchanging particle information and synchronization. 
+%%
+%The cost of communication varies based on the number of CNs, the number of total ranks, rank distribution across CNs, and the number of particles exchanged.
+%%
+%Finally, we considered the minimal encumbrance that can be placed on runtime memory for this technique: storing only current location and validity, and accessing only the vector field needed for a single step at any given time.}
+%%
 %a single vector field time-slice at any given time.
 %
 %\vspace{-2mm}

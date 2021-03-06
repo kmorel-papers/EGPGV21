@@ -1,7 +1,8 @@
 \begingroup
 \begin{table}[!h]
 \centering
-\resizebox{\columnwidth}{!}{%
+\scalebox{0.9}{
+%\resizebox{\columnwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|c|c|}
 \hline
 \textbf{Test} & \textbf{Interval} & \textbf{Reduction} & \textbf{Particles} & \textbf{Stored} & \textbf{Discarded} \\
@@ -20,7 +21,8 @@ T8 & 10 & & & 99.3\% & 0.7\% \\
 \hline
 \end{tabular}
 }
-\caption{The Jet test specifications.}
+\caption{\fix{Specifications for 8 Jet tests. In most cases, under 2\% of particle trajectories are discarded. We found accurate reconstruction of these trajectories~(see Figure~\ref{fig:jet_plot}) was dependent on the absolute number of stored particles.}}
+\vspace{-2mm}
 \label{jet_tab}
 \end{table}
 \endgroup
