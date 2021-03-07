@@ -35,11 +35,13 @@ The second solution is to stop discarding trajectories that hit the domain bound
 %
 In this case, Lagrangian analysis could remain communication-free but would need enhancements not only for how to represent trajectories (termination location and time, number of points stored along pathline), but also would require a novel post hoc interpolation scheme.
 %
+For example, a recent work on post hoc reconstruction leveraged deep learning to upsample 2D FTLE fields derived from reduced Lagrangian flow maps~\cite{jakob2020fluid}.
+%
 %In this case, Lagrangian analysis would remain communication-free but would need enhancements not only for how to represent trajectories that end abruptly (location, time, number of points along the curve, etc.) involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
 %
 %A flow map with arbitrary termination times for particle trajectories, however, would require a novel post hoc interpolation scheme.
 %
-We believe these limitations should be pursued for future work. 
+We believe these challenges should be pursued for future work. 
 %
 That said, we believe a significant number of use cases for Lagrangian analysis in practice today would not encounter these limitations. 
 % aforementioned limitations can be addressed via these solutions.

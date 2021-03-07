@@ -192,15 +192,16 @@ Overall, the discarded trajectories from the ABC data set Lagrangian flow map we
 Specifically, for all 9 tests the mean reconstruction error was between 2.5\% and 5\% of GCS from the ground truth.
 %
 
-\textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4, T5, and T6.
+\textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4 and T6.
 %
 We showed the absolute number of particles reconstructed for each storage interval for a more straightforward comparison between heatmaps.
 %
 Comparing these heatmaps, the effect of increasing the storage interval was that a larger number of particles were terminated in a single interval and thus reconstruction error increased. 
 %
-Further, the reconstruction error distribution matched the violin plots of T4, T5, and T6 in Figure~\ref{fig:abc_plot}. 
+%Further, the reconstruction error distribution matched the corresponding violin plots in Figure~\ref{fig:abc_plot}. 
 %
-Even for longer storage intervals, the error remained small, and discarded trajectories were reconstructed with high accuracy for the ABC data set.
+Figure~\ref{abc_ftle} visualizes the FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
+%Even for longer storage intervals, the error remained small, and the majority discarded trajectories were reconstructed with high accuracy for the ABC data set.
 
 %\vspace{-2mm}
 \subsubsection{Nyx Cosmology}
@@ -219,11 +220,13 @@ Additionally, Figure~\ref{fig:dataset_timings} shows the standard deviation was 
 %
 7 of 8 tests showed up to the third quartile reconstructing under 100\% of a GCS. 
 %
-Comparing tests T3 and T4 (1:1 data reduction factor) to tests T7 and T8 (1:8 data reduction factor), although T3 and T4 discarded a greater percentage of samples, they remained more accurate due to the overall number of particles used to sample the domain.
+Comparing tests T3 and T4 (1:1 data reduction factor) to tests T7 and T8 (1:8 data reduction factor), although T3 and T4 discarded a greater percentage of samples, they remained more accurate due to the absolute number of particles used to sample the domain.
 %
-For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction quality was high for both data reduction factors. 
+For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction quality was high for both data reduction factors.
 %
-Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error across every interval and temporal patterns of communication during the simulation. 
+Figure~\ref{nyx_ftle} shows the FTLE field derived using the T1 Lagrangian$_{Local}$ flow map. 
+%
+Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error and temporal pattern of communication during the simulation. 
 % of a Nyx configuration.
 
 \input{nyx_plot.tex}
@@ -258,6 +261,8 @@ Across the range of configurations in Figure~\ref{fig:jet_plot}, both the storag
 Further investigation into the distribution of T2 revealed that the longer storage interval and 1:1 sampling resulted in several particles terminating in easy-to-reconstruct areas of the domain at the start of the simulation (most other configurations showed particle termination only after cycle 30).
 %
 The sparser sampling for other configurations with the same storage interval missed this effect.
+%
+Although the median 
 %
 %Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
 %
