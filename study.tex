@@ -7,7 +7,7 @@ We computed Lagrangian flow maps for four data sets.
 
 \textbf{Cloverleaf3D.} This mini ECP application solves compressible Euler equations in a hydrodynamics setting on a Cartesian grid using an explicit second-order method~\cite{mallinson2013cloverleaf}.
 %
-Cloverleaf3D has been developed and used in several studies to evaluate emerging architectures and various techniques targeting large-scale applications.
+Cloverleaf3D has been used in several studies to evaluate emerging architectures and various techniques targeting large-scale applications.
 %
 The simulation is initially relatively stable and begins with an energy bar expanding from the center.
 %
@@ -23,7 +23,7 @@ We considered a grid size of $256^{3}$ ($\approx$ 16.5M cells) and generated 400
 %
 We used a test executable named TurbForce and generated 400 cycles of a $128^3$ data set ($\approx$ 2M cells) with a time step of 0.002.
 %
-The generated flow field has regions of high velocity and grows in turbulence over the duration of the simulation. 
+%The generated flow field has regions of high velocity and grows in turbulence over the duration of the simulation. 
 
 \textbf{Jet Flow.} This data set is a simulation of a jet of high-velocity fluid entering a medium at rest. 
 %
@@ -39,7 +39,7 @@ For this study, we conducted experiments in two phases.
 %
 %For this study, we set up two workflows:
 %\begin{itemize}[leftmargin=*]
-\textbf{Phase-I.} The first phase of experiments are conducted by directly integrating Ascent with the Cloverleaf3D simulation code. 
+\textbf{Phase-I.} The first phase of the experiments was conducted by directly integrating Ascent with the Cloverleaf3D simulation code. 
 %
 We conducted a weak scaling study on a modern supercomputer and considered the impact of the number of ranks and GPUs engaged per CN on execution time. 
 %
@@ -68,7 +68,7 @@ We also considered multiple values for the storage interval.
 %
 These tests provided insight into reconstruction accuracy, especially as vector field and configuration parameters varied. 
 %
-They also provided insight on computation performance.
+They also provided insight into the computational performance.
 %
 The results of \textbf{Phase-II} are presented in Section~\ref{sec:experiment2}.
 
@@ -90,7 +90,7 @@ These cycles included a communication cost incurred by Lagrangian$_{Dist}$ to re
 %
 \fix{In this paper, we do not analyze the parallel I/O times because (1) I/O times on supercomputers can be highly variable and lead to difficult interpretations, (2) infrequently performed I/O write times for our tests were less than the corresponding advection cost for a single step, and (3) local flow maps consistently led to fewer bytes stored, meaning we would expect I/O costs to not increase.}
 
-For post hoc reconstruction, a Delaunay triangulation is performed using CGAL~\cite{2020cgal} on a single-node workstation.
+For post hoc reconstruction, a Delaunay triangulation was performed using CGAL~\cite{2020cgal} on a single-node workstation.
 %
 In our experiments, the number of points for both Lagrangian$_{Local}$ and Lagrangian$_{Dist}$ were of the same magnitude, and thus, required similar reconstruction times.
 %
@@ -106,14 +106,14 @@ In our experiments, the number of points for both Lagrangian$_{Local}$ and Lagra
 %
 %Since the focus of this paper is the in situ extraction phase, we leave optimizations and accelerations of post hoc techniques for future work.
 
-\textbf{Reconstruction Accuracy.} We measured accuracy in two contexts: (1) reconstruction of any discarded particle trajectories, and (2) full pathlines.  
+\textbf{Reconstruction Accuracy.} We measured accuracy in two contexts: (1) reconstruction of any discarded particle trajectories and (2) full pathlines.  
 %We measure accuracy in two contexts: (1) to measure how accurately we can reconstruct any discarded particle trajectories, and (2) to measure the accuracy of full pathlines.  
 %
 In both cases, we measured Euclidean distances and represented error as a percentage of the grid cell side (GCS) to provide a perspective that is relative to the simulation domain.
 %
-If error is under 100\% of GCS it indicates a reconstructed particle trajectory end point is within one grid cell side of the ground truth.
+An error under 100\% of GCS indicates a reconstructed particle trajectory end point within one grid cell side of the ground truth.
 
-The first priority was understanding how accurately we can reconstruct the flow map. 
+The first priority was understanding how accurately we could reconstruct the flow map. 
 %, i.e., all particle trajectories computed using Lagrangian$_{Dist}$.
 %
 Since Lagrangian$_{Local}$ discards particle trajectories, potentially leaving a void of samples in the domain near boundaries, we reconstructed these trajectories by interpolating the stored flow map.
@@ -130,7 +130,7 @@ The measured reconstruction error is presented using violin plots and heatmaps (
 
 Second, for \textbf{C-I} and \textbf{C-II} we measured the accuracy of new pathlines.
 %
-In this case, pathlines are computed for the entire duration of the simulation run, and we reported the average L2-norm over all interpolated locations for each particle.
+In this case, pathlines were computed for the entire duration of the simulation run, and we reported the average L2-norm over all interpolated locations for each particle.
 %
 
 %Lastly, Lagrangian-based advection involves scattered point interpolation methods and, consequentially, any error introduced by the chosen method.

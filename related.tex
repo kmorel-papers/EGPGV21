@@ -8,7 +8,7 @@ Each integral curve provides insight regarding flow behavior in the vicinity of 
 %
 Collectively, a large number of integral curves spanning the spatial domain can be defined in terms of a flow map, i.e., a Lagrangian representation of the flow field.
 %
-The flow map $F_{t_0}^{t}(x_0):\mathbb R^d \times \mathbb R \times \mathbb R  \to \mathbb R^d$ describes where a particle starting at position $x_0\in \mathbb R^d$ and time $t_0\in \mathbb R$ moves to in the time interval $[t_0,t]\subset \mathbb R$~\cite{garth2007efficient}.
+The flow map $F_{t_0}^{t}(x_0):\mathbb R^d \times \mathbb R \times \mathbb R  \to \mathbb R^d$ describes to where a particle starting at position $x_0\in \mathbb R^d$ and time $t_0\in \mathbb R$ moves in the time interval $[t_0,t]\subset \mathbb R$~\cite{garth2007efficient}.
 %
 
 Agranovsky et al.~\cite{agranovsky2014improved} used in situ processing to compute reduced Lagrangian flow maps. 
@@ -46,7 +46,7 @@ Second, Rapp et al.~\cite{rapp2019void} applied a statistical sampling strategy 
 %
 %This strategy too, however, was limited to a single node and would require additional research to handle boundary conditions in a distributed-memory setting.
 %
-Although these sampling strategies can yield an improved reconstruction compared to uniform or random sampling, they were limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory in situ setting. 
+Although these sampling strategies can yield an improved reconstruction compared to uniform or random sampling, they are limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory in situ setting. 
 %Although these works showed that more complex sampling strategies can yield an improved reconstruction of the time-varying vector field compared to uniform or random sampling, they were limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory in situ setting. 
 %
 %Although these studies demonstrated the possibility to improve on the accuracy, they were demonstrated on a small scale and complex when extending to more CNs (as seen in practical in situ environments). 
@@ -60,14 +60,14 @@ Distributed-memory particle advection algorithms have historically been proposed
 %
 We refer readers to comprehensive surveys~\cite{PeterkaRNLSKH11,zhang2018survey} on this topic for steady and unsteady vector fields in multinode settings.
 %
-However, the existing post hoc solutions are not directly applicable due to different constraints and requirements of computing a Lagrangian flow map in situ.
+However, the existing post hoc solutions are not directly applicable due to the different constraints and requirements of computing a Lagrangian flow map in situ.
 %However, performing in situ distributed-memory particle advection to compute a Lagrangian flow map has constraints and requirements different to the post hoc use case.
 %
 We identify and list these differences in Table~\ref{table:differences}.
 
 The most significant challenge associated with distributed-memory particle advection is scalability.
 %
-The poor scalability is due to the frequent and large amount of communication required between processors as particles continue trajectory integration across rank domain boundaries.
+Poor scalability is due to the frequent and large amount of communication required between processors as particles continue trajectory integration across rank domain boundaries.
 %
 Most studies in this area have required particle exchange, but a few have used preprocessing or runtime operations to address scalability by limiting communication.
 %
@@ -75,9 +75,9 @@ Notably, Chen et al.~\cite{ChenXLS12, ChenS13} and Liao et al.~\cite{Liao2019Sca
 %
 %To calculate steady state LIC of unstructured meshes, Liao et al.~\cite{Liao2019ScalablePF} first preprocess the data to group cells on CNs and then limit particle advection to within a cell to eliminate communication.
 %
-Using parallelize-over-particles strategies, Guo et al.~\cite{GuoHSZHY14} and Zhang et al.~\cite{ZhangGY16} move and duplicate data between processors or use on-demand data loading.
+Using parallelize-over-particles strategies, Guo et al.~\cite{GuoHSZHY14} and Zhang et al.~\cite{ZhangGY16} moved and duplicated data between processors or used on-demand data loading.
 %
-Lastly, as an advection acceleration strategy, Bleile et al.~\cite{bleile2017accelerating} compute block-specific flow maps for a single time-slice as a communication-free preprocess and use the mapping to transport particles across entire blocks in a single step. 
+Lastly, as an advection acceleration strategy, Bleile et al.~\cite{bleile2017accelerating} computed block-specific flow maps for a single time-slice as a communication-free preprocess and used the mapping to transport particles across entire blocks in a single step. 
 %
 However, this technique is only applicable for post hoc steady state vector field analysis.
 %
