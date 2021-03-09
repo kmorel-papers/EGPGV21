@@ -57,6 +57,8 @@ e_{n}\leq\frac {d^2}8(t_n-t_0) h_x^2\max_{\tau\in[t_0,t_n]}\max_{\zeta\in\mathbb
 %
 with dimension $d$, start time $t_0$, end time $t_n$, spatial Lipschitz constant $L$, Hessian $H$ of the temporal derivative of the flow map $\dot F$, and spatial distance $h_x$ between the flow map trajectories.
 %
+\fix{A detailed derivation of equation~\ref{global} can be found in~\cite{bujack2015lagrangian}.}
+%
 As a result, the interpolation error is $O(h_x^2)$ if the flow map has bounded second derivatives in space and first derivatives in time, which is a reasonable assumption for a differentiable vector field, because the solutions of an initial value problem depend smoothly on the initial conditions and time~\cite{hartman1973ordinary}.
 %
 
@@ -66,12 +68,12 @@ Its size is determined by the size of missing information, which is limited by t
 %
 If a particle is seeded further than $\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i)\|$ away from the node boundary, it cannot reach it and must therefore have the correct flow map information.
 %
-In the worst case, we can have missing information on both sides of the boundary, and therefore we get
+In the worst case, we can have missing information on both sides of the boundary, \fix{and therefore it follows from the mean value theorem that}
 %
 \begin{footnotesize}
 \begin{eqnarray}
 \begin{aligned}\label{hx}
-\tilde h_x&\leq 2h_x+2\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i)\|\\
+\tilde h_x&\leq 2h_x+2\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i) - x_i\|\\
 &\leq 2h_x+2 h_t \max_{x\in\mathbb R^d} \max_{t\in[t_{j-1},t_j]}\| v(x,t)\|
 \end{aligned}
 \end{eqnarray}

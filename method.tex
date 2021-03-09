@@ -24,7 +24,8 @@ The fundamental operation of particle advection required to compute the particle
 %
 VTK-m is a platform-portable scientific visualization library for shared-memory parallel environments and enabled us to easily engage GPUs for particle advection.
 %
-Specifically, we used a fourth-order Runge Kutta interpolation implemented as a VTK-m worklet~\cite{pugmire2018performance}.
+Specifically, in situ particle advection is performed using fourth-order Runge Kutta for interpolation.
+%Specifically, we used a fourth-order Runge Kutta interpolation implemented as a VTK-m worklet~\cite{pugmire2018performance}.
 %
 Ascent has VTK-h~\cite{Larsen2017Ascent} as a distributed-memory wrapper around VTK-m.
 %
