@@ -52,19 +52,21 @@ The ``sawtooth'' nature of the line curves in Figure~\ref{fig:total_time} is the
 %
 Varying the number of ranks (each using 1 GPU) on each CN impacted both particle advection and communication costs.
 %
+Figure~\ref{fig:gpu_nodes} isolates these costs to show the weak scaling trends.
+%
 %Using data points from our weak scaling \textbf{Phase-I} study, we analyze these effects.
 %
 %
 %Figure~\ref{fig:advection} isolates the costs of particle advection per step of Lagrangian$_{Local}$.
 %
-Particle advection performed better with 4 GPUs per CN versus 6.
+From Figure~\ref{fig:advection}, particle advection performed better with 4 GPUs per CN versus 6.
 %
 Use of shared memory by multiple GPUs on a single CN and saturation of the NVLink by the VTK-m particle advection kernel caused this effect.
 %
 %
 %Figure~\ref{fig:communication} shows the difference in communication costs per step for Lagrangian$_{Dist}$.
 %
-In contrast, the MPI communication cost showed a reduction when using 6 ranks versus 4 per CN. 
+In contrast, the MPI communication cost showed a reduction when using 6 ranks versus 4 per CN as seen in Figure~\ref{fig:communication}. 
 %
 %The data points using 4 ranks per CN show poor scalability as the number of CNs continues to increase.
 %
@@ -76,9 +78,9 @@ Configurations using 4 ranks per CN showed particularly poor scalability as the 
 %
 %Although these results inform computational performance, the specific configuration is determined by the simulation.
 %
-These weak scaling trends can be observed by isolating the individual costs. 
+%These weak scaling trends can be observed by isolating the individual costs. 
 %
-Figure~\ref{fig:advection} shows particle advection costs per step for Lagrangian$_{Local}$, and Figure~\ref{fig:communication} shows communication costs per step for Lagrangian$_{Dist}$. 
+%Figure~\ref{fig:advection} shows particle advection costs per step for Lagrangian$_{Local}$, and Figure~\ref{fig:communication} shows communication costs per step for Lagrangian$_{Dist}$. 
 
 \textbf{Reconstruction Accuracy.}
 We calculated the reconstruction accuracy for 8 of the Lagrangian$_{Local}$ weak scaling \textbf{Phase-I} configurations, which we labeled T1 through T8~(see Figure~\ref{fig:clover_plot}). 
@@ -93,19 +95,19 @@ Over 75\% of discarded trajectories have reconstruction error under 25\% of a GC
 %
 Further, this trend was observed across all the 8 test configurations we reconstructed. 
 
-Reconstruction accuracy, however, was not constant across all storage intervals and demonstrates temporal patterns.
+%Reconstruction accuracy, however, was not constant across all storage intervals and demonstrates temporal patterns.
 %
 %
-Figure~\ref{fig:clover_map} uses a heatmap for reconstruction accuracy across every interval of a Cloverleaf3D test. 
+%Figure~\ref{fig:clover_map} uses a heatmap for reconstruction accuracy across every interval of a Cloverleaf3D test. 
 %
-Measuring reconstruction accuracy for individual intervals could provide insight into the suitability to compute local Lagrangian flow maps versus incur communication costs to retain all particles trajectories.
+%Measuring reconstruction accuracy for individual intervals could provide insight into the suitability to compute local Lagrangian flow maps versus incur communication costs to retain all particles trajectories.
 %
 %This concept can extend to consider spatial patterns as well. 
 %
-\input{clover_plot.tex}
-\input{clover_map.tex}
+%\input{clover_map.tex}
 %
 Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8 data reduction factor, the complete Lagrangian flow map was reconstructed accurately (under 100\% of GCS) while providing speed-ups of 2x-4x for the Cloverleaf3D data set.
+\input{clover_plot.tex}
 
 \vspace{-2mm}
 \subsubsection{C-I Results} 
@@ -136,7 +138,6 @@ These results highlight the limitations of the Lagrangian$_{Local}$ technique as
 %
 %That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
 
-\input{eulerian_table.tex}
 %\vspace{-2mm}
 \subsubsection{C-II Results} 
 Here, we compared Lagrangian$_{Local}$ to an Eulerian representation with temporal subsampling.
@@ -155,6 +156,7 @@ To compare accuracy, we reconstructed 100,000 randomly seeded pathlines for 600 
 Overall, Lagrangian$_{Local}$ was increasingly accurate (6x to 11x) compared to the Eulerian approach as the interval size increased, but required less data storage.
 %
 These results aligned with findings in prior works~\cite{agranovsky2014improved, sane2018revisiting} that compared the use of Lagrangian representations to the traditional approach under sparse temporal settings.
+\input{eulerian_table.tex}
 
 \vspace{-2mm}
 \subsection{Phase-II Results Using ABC, Nyx, Jet Data Sets}
@@ -163,6 +165,8 @@ This section presents results for three time-varying data sets.
 We considered a fixed amount of compute resources and varied configuration parameters that impact both execution time and reconstruction accuracy.
 %
 Figure~\ref{fig:dataset_timings} contains the computation costs for all \textbf{Phase-II} experiments.
+%
+\fix{Additionally, we derived, visualized, and compared the finite-time Lyapunov exponent (FTLE) scalar field using select Lagrangian$_{Local}$ flow maps for each of these data sets to the ground truth FTLE field.}
 \input{dataset_timings.tex}
 \label{sec:experiment2}
 \vspace{-2mm}
@@ -186,13 +190,13 @@ Further, particle advection for up to 2M particles~(32k particles per GPU) was p
 
 \textbf{Reconstruction Accuracy.} Figure~\ref{fig:abc_plot}'s violin plots indicate the ABC data set showed shifts in reconstruction error distribution when varying the storage intervals and sampling resolution. 
 %
-Further, the error range for all configurations was similar.
+The error range for all configurations, however, was similar.
 %
-Overall, the discarded trajectories from the ABC data set Lagrangian flow map were reconstructed accurately, with trajectories interpolated to the same grid cell as the ground truth.
+The discarded trajectories from the ABC data set Lagrangian flow map were reconstructed accurately, with trajectories interpolated to the same grid cell as the ground truth.
 %
 Specifically, for all 9 tests, the mean reconstruction error was between 2.5\% and 5\% of GCS from the ground truth.
 %
-
+\fix{Figure~\ref{abc_ftle} shows the FTLE field derived from test T6 contains small amounts of noise along the node boundaries.}
 \textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4 and T6.
 %
 The figure shows the absolute number of particles reconstructed for each storage interval for a more straightforward comparison between heatmaps.
