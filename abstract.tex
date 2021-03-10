@@ -2,7 +2,7 @@
 %
 However, the current literature is largely limited to theoretical settings and lacks a solution to address scalability of the technique in distributed memory.
 %
-To improve scalability, we propose and quantitatively evaluate the benefits and limitations of a simple, yet novel, performance optimization.
+To improve scalability, we propose and evaluate the benefits and limitations of a simple, yet novel, performance optimization.
 %
 Our proposed optimization is a communication-free model resulting in local Lagrangian flow maps, requiring no message passing or synchronization between processes, intrinsically improving scalability, and thereby reducing overall execution time and alleviating the encumbrance placed on simulation codes from communication overheads.
 %
@@ -10,5 +10,5 @@ To evaluate our approach, we computed Lagrangian flow maps for four time-varying
 %
 Our study consisted of experiments computing Lagrangian flow maps with up to 67M particle trajectories over 500 cycles and used as many as 2048 GPUs across 512 compute nodes.
 %
-In all, our study contributes a quantitative evaluation of a communication-free model as well as a scalability study of computing distributed Lagrangian flow maps at scale using in situ infrastructure on a modern supercomputer.
+In all, our study contributes an evaluation of a communication-free model as well as a scalability study of computing distributed Lagrangian flow maps at scale using in situ infrastructure on a modern supercomputer.
 %

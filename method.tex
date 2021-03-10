@@ -11,7 +11,7 @@ Section~\ref{sec:posthoc} describes how post hoc reconstruction, which applies t
 %
 Further, based on the in situ system classification in~\cite{childs2020istp}, the Lagrangian flow map extraction system is classified as one with a dedicated API integration, on-node proximity, direct access, a time division of execution, automatic operation, and a derived output type.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{In Situ Infrastructure}
 \label{sec:insituinfrastructure}
 Our study used the Ascent in situ infrastructure~\cite{Larsen2017Ascent}.
@@ -47,7 +47,7 @@ The rank-specific Lagrangian filter used the simulation vector field data to adv
 
 \input{notional_examples.tex}
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Traditional Computation of Lagrangian Flow Maps}
 \label{sec:baseline}
 Conceptually, a Lagrangian representation encodes the behavior of a time-varying flow using particle trajectories.
@@ -65,6 +65,7 @@ and is referred to as Lagrangian$_{Dist}$.
 
 For Lagrangian$_{Dist}$, we defined the overall strategy for flow map computation by considering four aspects:
 %
+\vspace{-1mm}
 \begin{itemize}[leftmargin=*]
 \item\textbf{Sampling:} For each data block, seeds are placed along a uniform grid. As particles are advected, they may diverge or cluster. 
 %
@@ -88,6 +89,7 @@ In our implementation, we stored the end location and a Boolean indicating valid
 %
 %Prior to storage, particles that have traveled across boundaries are communicated back to the originating rank. 
 %
+\vspace{-1mm}
 \end{itemize}
 
 %From a performance perspective, 
@@ -107,7 +109,7 @@ In our implementation, we stored the end location and a Boolean indicating valid
 %%
 %a single vector field time-slice at any given time.
 %
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Computation of Local Lagrangian Flow Maps}
 \label{sec:local}
 %As mentioned in the previous section, the two main costs are (1) an advection step and (2) communication.
@@ -125,6 +127,7 @@ With this work, we propose an optimization to address the increasing cost of com
 Our strategy is a simple, yet novel and scalable, approach: skip all the communication and compute only local Lagrangian flow maps in situ. 
 %
 We refer to this implementation as Lagrangian$_{Local}$ and define the overall strategy as follows:
+\vspace{-1mm}
 \begin{itemize}[leftmargin=*]
 \item\textbf{Sampling:} Similar to Lagrangian$_{Dist}$, we used a uniform seed placement and a fixed storage interval.
 %
@@ -136,6 +139,7 @@ Additionally, seeds can be placed redundantly along domain boundaries in adjacen
 %
 \item\textbf{Storage:} For a uniform grid, we stored the end location (3 double) and validity (1 Boolean). Particles that were discarded were marked as invalid. 
 %
+\vspace{-1mm}
 \end{itemize}
 
 %Figures~\ref{fig:dist_1} and~\ref{fig:local_1} show notional examples of the particle trajectory calculation for Lagrangian$_{Dist}$ and Lagrangian$_{Local}$, respectively. 
@@ -164,7 +168,7 @@ Further, for storage intervals that are used in practice, we hypothesize only a 
 %
 However, the loss of information in the form of discarded particle trajectories could reduce the quality of flow reconstruction.
 %
-Discarded or new trajectories can be interpolated using valid trajectories from adjacent processors during post hoc analysis.
+%Discarded or new trajectories can be interpolated using valid trajectories from adjacent processors during post hoc analysis.
 %
 Our study evaluates this trade-off.
 %
@@ -177,7 +181,7 @@ Our study assumed an ``always off'' approach, which we view as invaluable for fu
 %
 %We refer to our implementation of local Lagrangian flow maps as Lagrangian$_{Local}$.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Post Hoc Flow Field Reconstruction}
 \label{sec:posthoc}
 We used a Lagrangian-based advection scheme similar to prior work~\cite{agranovsky2014improved, sane2018revisiting, sane2019interpolation}.

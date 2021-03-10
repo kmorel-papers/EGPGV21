@@ -1,6 +1,6 @@
 This section describes our data sets~(\ref{sec:datasets}), experiments~(\ref{sec:experiments}), evaluation considerations~(\ref{sec:metrics}), and runtime environment~(\ref{sec:runtime}).
 %
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Data Sets}
 \label{sec:datasets}
 We computed Lagrangian flow maps for four data sets.
@@ -31,7 +31,7 @@ It was created using the Gerris Flow Solver~\cite{popinet2003gerris}.
 %
 The vector field is defined over a $128\times256\times128$ grid~($\approx$~4.1M cells) and 300 cycles with a step size of 0.001.
 %
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Experiment Setup}
 \label{sec:experiments}
 For this study, we conducted experiments in two phases. 
@@ -46,10 +46,12 @@ We conducted a weak scaling study on a modern supercomputer and considered the i
 Additionally, we performed two comparisons referred to as \textbf{C-I} and \textbf{C-II} using the Cloverleaf3D simulation code: 
 %and evaluate accuracy by calculating full pathlines post hoc: 
 %
+\vspace{-1mm}
 \begin{itemize}[leftmargin=*]
 \item\textbf{C-I.} We compared Lagrangian$_{Local}$ to Lagrangian$_{Dist}$ when the number of ranks for a fixed grid size, i.e., the degree of domain decomposition, varied.
 %
 \item\textbf{C-II.} We compared Lagrangian$_{Local}$ to the Eulerian technique to verify that accuracy-storage benefits observed in prior works remain. 
+\vspace{-1mm}
 \end{itemize}
 %
 The results of \textbf{Phase-I} are presented in Section~\ref{sec:experiment1}.
@@ -76,7 +78,7 @@ The results of \textbf{Phase-II} are presented in Section~\ref{sec:experiment2}.
 %
 %Furthermore, we reconstruct the discarded trajectories from Lagrangian$_{Local}$ and compare them to the ground truth, i.e., a particle trajectory computed using every cycle of the time-varying vector field.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Evaluation}
 \label{sec:metrics}
 %We measure the execution time for both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ while executing in situ and use Ascent's timing functionality.
@@ -136,7 +138,7 @@ In this case, pathlines were computed for the entire duration of the simulation 
 %Lastly, Lagrangian-based advection involves scattered point interpolation methods and, consequentially, any error introduced by the chosen method.
 %
 %Lagrangian-based advection used for pathline interpolation has been studied by prior works~\cite{agranovsky2015subsampling, bujack2015lagrangian, hummel2016error, sane2018revisiting, sane2019interpolation}. 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Runtime Environment}
 \label{sec:runtime}
 We tested the Lagrangian analysis techniques by running the experiments on Summit (a supercomputer at ORNL).
@@ -147,4 +149,4 @@ Each CN of Summit has two IBM Power9 CPUs,
 each with enhanced on-chip acceleration via NVLink to 3 GPUs; the total GPUs per CN is 6.
 %Further, CNs on Summit have enhanced on-chip acceleration with each CPU connected via NVLink to 3 GPUs, for a total of 6 GPUs per CN.
 %
-Each GPU is a NVIDIA Tesla V100 with 5120 CUDA cores, 6.1 TeraFLOPS of double precision performance, and 16 GBytes of HBM2 memory.
+Each GPU is a NVIDIA Tesla V100 with 5120 CUDA cores and 16 GBytes of HBM2 memory.

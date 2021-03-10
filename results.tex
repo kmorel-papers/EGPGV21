@@ -1,9 +1,9 @@
 We organize our results into two subsections, with each subsection focusing on results from a phase of experiments.
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Phase-I Results Using Cloverleaf3D Simulation Code}
 \label{sec:experiment1}
 We report the results of \textbf{Phase-I} experiments that include a weak scaling study, \textbf{C-I}, and \textbf{C-II}.
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{Weak Scaling Study} 
 We considered 17 configurations of the Cloverleaf3D simulation in our weak scaling \textbf{Phase-I} study. 
 %
@@ -107,7 +107,7 @@ Measuring reconstruction accuracy for individual intervals could provide insight
 %
 Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8 data reduction factor, the complete Lagrangian flow map was reconstructed accurately (under 100\% of GCS) while providing speed-ups of 2x-4x for the Cloverleaf3D data set.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{C-I Results} 
 %
 \input{strongscaling.tex}
@@ -136,8 +136,8 @@ These results highlight the limitations of the Lagrangian$_{Local}$ technique as
 %
 %That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
 
-%\vspace{-2mm}
 \input{eulerian_table.tex}
+%\vspace{-2mm}
 \subsubsection{C-II Results} 
 Here, we compared Lagrangian$_{Local}$ to an Eulerian representation with temporal subsampling.
 %
@@ -156,7 +156,7 @@ Overall, Lagrangian$_{Local}$ was increasingly accurate (6x to 11x) compared to 
 %
 These results aligned with findings in prior works~\cite{agranovsky2014improved, sane2018revisiting} that compared the use of Lagrangian representations to the traditional approach under sparse temporal settings.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsection{Phase-II Results Using ABC, Nyx, Jet Data Sets}
 This section presents results for three time-varying data sets.
 %
@@ -165,7 +165,7 @@ We considered a fixed amount of compute resources and varied configuration param
 Figure~\ref{fig:dataset_timings} contains the computation costs for all \textbf{Phase-II} experiments.
 \input{dataset_timings.tex}
 \label{sec:experiment2}
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{ABC Flow}
 \label{sec:abc}
 
@@ -201,10 +201,10 @@ Comparing these heatmaps, the effect of increasing the storage interval was that
 %
 %Further, the reconstruction error distribution matched the corresponding violin plots in Figure~\ref{fig:abc_plot}. 
 %
-Figure~\ref{abc_ftle} visualizes an FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
+%Figure~\ref{abc_ftle} visualizes an FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
 %Even for longer storage intervals, the error remained small, and the majority discarded trajectories were reconstructed with high accuracy for the ABC data set.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{Nyx Cosmology}
 \label{sec:nyx}
 Table~\ref{nyx_tab} lists all the Nyx \textbf{Phase-II} test configurations. 
@@ -234,7 +234,7 @@ Figure~\ref{nyx_ftle} shows an FTLE field derived using the T1 Lagrangian$_{Loca
 %\input{nyx_map.tex}
 \input{nyx_figure.tex}
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{Jet Flow}
 \label{sec:jet}
 Table~\ref{jet_tab} lists all the Jet \textbf{Phase-II} test configurations.
