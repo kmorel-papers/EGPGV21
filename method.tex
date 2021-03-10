@@ -39,6 +39,8 @@ Ascent is invoked every cycle of the simulation, and it consequently invoked the
 %
 The rank-specific Lagrangian filter used the simulation vector field data to advect particles every cycle, and triggered the storage of trajectories that comprise the Lagrangian flow map. 
 %
+\fix{Lagrangian analysis capabilities are accessible via the open-source Ascent library, and a single-node shared memory version is accessible directly via VTK-m.}
+%
 %Creating an instance of Ascent, specifying parameters, and invoking the Lagrangian filter requires only 20 lines of code (C++) and fewer if a JSON input file is used.
 \input{insituinfrastructure.tex}
 
@@ -208,7 +210,7 @@ The identified neighborhood forms a convex hull around the particle $P$.
 %
 Next, $P$ ``follows'' the neighborhood until the end of the specific storage interval.
 %
-To compute the next location of $P$, we used the end locations of the neighborhood particles and barycentric coordinate interpolation as suggested by Agranovsky et al.~\cite{agranovsky2015subsampling}.
+To compute the next location of $P$, we used the end locations of the neighborhood particles and barycentric coordinate interpolation.
 %
 This process can continue for several steps, with the particle advancing in time by the length of the storage interval.
 %

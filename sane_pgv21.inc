@@ -442,7 +442,8 @@
 %
 %%-------------------------------------------------------------------------
 %% bibtex
-\bibliographystyle{eg-alpha-doi} 
+%\bibliographystyle{eg-alpha-doi} 
+\bibliographystyle{eg-alpha} 
 \bibliography{sane_pgv21}       
 %
 %% biblatex with biber
