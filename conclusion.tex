@@ -6,13 +6,13 @@ In this paper, we presented a study computing in situ Lagrangian flow maps using
 %
 %Computing a Lagrangian flow map involves distributed-memory particle advection, an extensively researched parallel and distributed computing task.
 %
-We proposed the computation and use of local Lagrangian flow maps and quantitatively evaluated the benefits and limitations of a simple strategy using multiple time-varying vector field data sets.
+We proposed the computation and use of local Lagrangian flow maps and evaluated the benefits and limitations of a simple strategy using multiple time-varying vector field data sets.
 %
 Our study evaluated the impact of the number of particles and test configuration parameters (GPUs, rank, compute nodes) on the total, particle advection, and communication time during in situ analysis.
 %
 The largest configuration we considered computed 67M particle trajectories over 500 cycles of a $812^{3}$ grid using 2048 GPUs across 512 compute nodes.
 %
-We empirically showed that for several practical configurations local Lagrangian flow maps can be interpolated with a minimal loss of accuracy, i.e., particle trajectory reconstruction is less than a single grid cell side away from the ground truth, while requiring a fraction of the execution time. 
+We empirically showed that for several practical configurations local Lagrangian flow maps can be interpolated with a minimal loss of accuracy, while requiring a fraction of the execution time. 
 %
 Finally, the computation of local Lagrangian flow maps demonstrated scalability and offered greater predictability for in situ analysis costs.
 %

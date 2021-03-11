@@ -205,7 +205,7 @@ Comparing these heatmaps, the effect of increasing the storage interval was that
 %
 %Further, the reconstruction error distribution matched the corresponding violin plots in Figure~\ref{fig:abc_plot}. 
 %
-\fix{Although Figure~\ref{abc_ftle} shows the FTLE field derived from the reduced Lagrangian$_{Local}$ test T6 is similar to the ground truth, it contains some error along the node boundaries.}
+\fix{While Figure~\ref{abc_ftle} shows the FTLE field derived from the reduced Lagrangian$_{Local}$ test T6 is similar to the ground truth, it contains some error along the node boundaries.}
 %Figure~\ref{abc_ftle} visualizes an FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
 %Even for longer storage intervals, the error remained small, and the majority discarded trajectories were reconstructed with high accuracy for the ABC data set.
 
@@ -237,7 +237,9 @@ For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction qualit
 %
 Interpolating multiple intervals leads to error propagation.
 %
-The result indicated the error introduced from  
+The consequence of the error propagation was the noise introduced in the FTLE derived using T1 flow maps.
+%
+In contrast, the FTLE derived from a single interval of T3 produced a more accurate result. 
 }
 %
 %Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error and temporal pattern of communication during the simulation. 
@@ -275,11 +277,12 @@ Further investigation into the distribution of T2 revealed that the longer stora
 %
 For tests using a storage interval of 10~(T2, T4, T6, T8), the reconstruction accuracy is reduced.
 %
+%The overall structure of FTLE ridges is preserved
 %The sparser sampling for other configurations with the same storage interval missed this effect.
 %
-Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T2 Lagrangian$_{Local}$ flow map and annotates regions of reduced quality reconstruction.
+%Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T2 Lagrangian$_{Local}$ flow map and annotates regions of reduced quality reconstruction.
 %
-However, since the absolute number of particles stored for this test remained high at 97.9\%, most of the FTLE field structure was well reconstructed.
+%However, since the absolute number of particles stored for this test remained high at 97.9\%, most of the FTLE field structure was well reconstructed.
 %
 %Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
 %
@@ -293,7 +296,11 @@ For test T1 using a 1:1 sampling, reconstruction accuracy was high and a larger 
 %
 As the number of particles used to sample the domain reduced, a higher percentage of particles were reconstructed multiple cells away from the ground truth. 
 %
-For example, in Figure~\ref{fig:jet_7} test T7 used a 1:64 data reduction factor and there are more red/orange cells with higher error during the later stages of the simulation. 
+In Figure~\ref{fig:jet_7}, test T7 used a 1:64 data reduction factor and there are more red/orange cells with higher error during the later stages of the simulation. 
+%
+\fix{Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T1~(1:1) and T3~(1:8) Lagrangian$_{Local}$ flow maps.
+%
+Considering the 1:8 data reduction for T3, the overall FTLE ridge structure can be visualized with a small loss of accuracy.}
 %
 %Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
 %
