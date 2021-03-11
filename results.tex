@@ -178,7 +178,6 @@ Table~\ref{abc_tab} lists all the ABC \textbf{Phase-II} test configurations.
 %
 \input{abc_table.tex}
 \input{abc_plot.tex}
-\input{abc_figure.tex}
 
 \textbf{Execution Time.} Using 64 MPI ranks across 16 CNs, each with 1 GPU, Lagrangian$_{Local}$ required up to 2.8x less execution time as Lagrangian$_{Dist}$.
 %
@@ -196,7 +195,8 @@ The discarded trajectories from the ABC data set Lagrangian flow map were recons
 %
 Specifically, for all 9 tests, the mean reconstruction error was between 2.5\% and 5\% of GCS from the ground truth.
 %
-\fix{Figure~\ref{abc_ftle} shows the FTLE field derived from test T6 contains small amounts of noise along the node boundaries.}
+\input{abc_figure.tex}
+
 \textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4 and T6.
 %
 The figure shows the absolute number of particles reconstructed for each storage interval for a more straightforward comparison between heatmaps.
@@ -205,6 +205,7 @@ Comparing these heatmaps, the effect of increasing the storage interval was that
 %
 %Further, the reconstruction error distribution matched the corresponding violin plots in Figure~\ref{fig:abc_plot}. 
 %
+\fix{Although Figure~\ref{abc_ftle} shows the FTLE field derived from the reduced Lagrangian$_{Local}$ test T6 is similar to the ground truth, it contains some error along the node boundaries.}
 %Figure~\ref{abc_ftle} visualizes an FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
 %Even for longer storage intervals, the error remained small, and the majority discarded trajectories were reconstructed with high accuracy for the ABC data set.
 
@@ -220,6 +221,9 @@ Table~\ref{nyx_tab} lists all the Nyx \textbf{Phase-II} test configurations.
 %
 Additionally, Figure~\ref{fig:dataset_timings} shows the standard deviation was greater for the Lagrangian$_{Dist}$ tests and was caused by the larger number of particles exchanges between ranks for this data set.
 %
+\input{nyx_plot.tex}
+%\input{nyx_map.tex}
+\input{nyx_figure.tex}
 
 \textbf{Reconstruction Accuracy.} As a consequence of a large number of particles being discarded by Lagrangian$_{Local}$, the accuracy of reconstruction was impacted for tests with longer storage intervals.
 %
@@ -229,14 +233,16 @@ Comparing tests T3 and T4 (1:1 data reduction factor) to tests T7 and T8 (1:8 da
 %
 For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction quality was high for both data reduction factors.
 %
-Figure~\ref{nyx_ftle} shows an FTLE field derived using the T1 Lagrangian$_{Local}$ flow map. 
+\fix{Figure~\ref{nyx_ftle} compares the FTLE field derived by interpolating a single longer interval~(T3) to interpolating multiple intervals~(T1) of Lagrangian$_{Local}$ flow maps.
+%
+Interpolating multiple intervals leads to error propagation.
+%
+The result indicated the error introduced from  
+}
 %
 %Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error and temporal pattern of communication during the simulation. 
 % of a Nyx configuration.
 
-\input{nyx_plot.tex}
-%\input{nyx_map.tex}
-\input{nyx_figure.tex}
 
 \vspace{-2mm}
 \subsubsection{Jet Flow}
