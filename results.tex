@@ -239,7 +239,9 @@ Interpolating multiple intervals leads to error propagation.
 %
 The consequence of the error propagation was the noise introduced in the FTLE derived using T1 flow maps.
 %
-In contrast, the FTLE derived from a single interval of T3 produced a more accurate result. 
+In contrast, interpolating the single longer interval of T3 flow maps generated an FTLE field closer to the ground truth.
+%In contrast, the single longer interval of T3  a more accurate result. 
+%
 }
 %
 %Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error and temporal pattern of communication during the simulation. 
@@ -264,7 +266,6 @@ A single outlier Lagrangian$_{Local}$ test showed a higher computation cost.
 
 \input{jet_plot.tex}
 \input{jet_map.tex}
-\input{jet_figure.tex}
 \textbf{Reconstruction Accuracy.} The Jet data set presented an adversarial case for our proposed optimization of computing local flow maps.
 %
 The data set contained regions with high velocity magnitude.
@@ -308,4 +309,4 @@ Considering the 1:8 data reduction for T3, the overall FTLE ridge structure can 
 %
 %
 %Overall, based on the distribution of reconstruction accuracy, the probability of accurate reconstruction increases with more samples.
-
+%\input{jet_figure.tex}
