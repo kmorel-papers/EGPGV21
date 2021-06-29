@@ -19,8 +19,6 @@ Given the variation in grid size, each test reached a different stage of the sim
 %
 As the simulation grid size increased, the step size used by the simulation decreased.
 %
-%We believe this was an acceptable assumption for most simulation codes.
-%
 With respect to parameterization of the Lagrangian flow map computation, we used a storage interval of 25 cycles and a data reduction of 1:8 ($\approx32,768$ particles seeded per MPI rank) for every test.
 
 \textbf{Execution Time.} Figure~\ref{fig:total_time} compares the average total time required per step by Lagrangian$_{Dist}$ and Lagrangian$_{Local}$.
@@ -37,38 +35,22 @@ The cost of particle advection (for both techniques) increased as the scale of t
 %
 However, this increase in particle advection cost was attributed to the difference in each test domain and the RK4 kernel that performed velocity field interpolation.
 %
-%We believe the performance of the kernel considering the parameters of cell size, step size, and vector field is worth future investigation.
-%
 Further, use of a faster particle advection kernel would result in greater speed-ups for Lagrangian$_{Local}$.
 \input{weakscaling.tex}
 \input{gpu_nodes.tex}
 
-%\textbf{Varying GPUs/Ranks per Compute Node.}
-%Since each CN on Summit has 6 GPUs, a simulation can be configured in several ways.
-%
-%In our tests, each rank has a dedicated GPU and operates on approximately the same number of particles.
-%
+
 The ``sawtooth'' nature of the line curves in Figure~\ref{fig:total_time} is the result of a series of test configurations alternating between 4 and 6 ranks per CN.
 %
 Varying the number of ranks (each using 1 GPU) on each CN impacted both particle advection and communication costs.
 %
 Figure~\ref{fig:gpu_nodes} isolates these costs to show the weak scaling trends.
 %
-%Using data points from our weak scaling \textbf{Phase-I} study, we analyze these effects.
-%
-%
-%Figure~\ref{fig:advection} isolates the costs of particle advection per step of Lagrangian$_{Local}$.
-%
 From Figure~\ref{fig:advection}, particle advection performed better with 4 GPUs per CN versus 6.
 %
 Use of shared memory by multiple GPUs on a single CN and saturation of the NVLink by the VTK-m particle advection kernel caused this effect.
 %
-%
-%Figure~\ref{fig:communication} shows the difference in communication costs per step for Lagrangian$_{Dist}$.
-%
 In contrast, the MPI communication cost showed a reduction when using 6 ranks versus 4 per CN as seen in Figure~\ref{fig:communication}. 
-%
-%The data points using 4 ranks per CN show poor scalability as the number of CNs continues to increase.
 %
 On-node MPI communication optimizations contributed to better performance when grouping a larger number of MPI ranks on each CN. 
 %
@@ -76,11 +58,6 @@ However, the communication cost of inter-node remained high in comparison to int
 %
 Configurations using 4 ranks per CN showed particularly poor scalability as the number of CNs increased.
 %
-%Although these results inform computational performance, the specific configuration is determined by the simulation.
-%
-%These weak scaling trends can be observed by isolating the individual costs. 
-%
-%Figure~\ref{fig:advection} shows particle advection costs per step for Lagrangian$_{Local}$, and Figure~\ref{fig:communication} shows communication costs per step for Lagrangian$_{Dist}$. 
 
 \textbf{Reconstruction Accuracy.}
 We calculated the reconstruction accuracy for 8 of the Lagrangian$_{Local}$ weak scaling \textbf{Phase-I} configurations, which we labeled T1 through T8~(see Figure~\ref{fig:clover_plot}). 
@@ -95,16 +72,6 @@ Over 75\% of discarded trajectories have reconstruction error under 25\% of a GC
 %
 Further, this trend was observed across all the 8 test configurations we reconstructed. 
 
-%Reconstruction accuracy, however, was not constant across all storage intervals and demonstrates temporal patterns.
-%
-%
-%Figure~\ref{fig:clover_map} uses a heatmap for reconstruction accuracy across every interval of a Cloverleaf3D test. 
-%
-%Measuring reconstruction accuracy for individual intervals could provide insight into the suitability to compute local Lagrangian flow maps versus incur communication costs to retain all particles trajectories.
-%
-%This concept can extend to consider spatial patterns as well. 
-%
-%\input{clover_map.tex}
 %
 Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8 data reduction factor, the complete Lagrangian flow map was reconstructed accurately (under 100\% of GCS) while providing speed-ups of 2x-4x for the Cloverleaf3D data set.
 \input{clover_plot.tex}
@@ -117,8 +84,6 @@ Overall, using Lagrangian$_{Local}$ with a storage interval of 25 cycles and 1:8
 Multiphysics HPC simulations typically have millions of grid points per rank and increase grid resolution as the number of ranks increases. 
 %
 To identify limitations, we evaluated Lagrangian$_{Local}$ in situations where this was not the case, i.e., when the number of processes operating over a fixed grid size increased.
-%
-%Although multiphysics HPC simulations typically have hundreds of thousands of grid points per data block, we evaluate Lagrangian$_{Local}$ in situations where this is not the case and the number of processes operating over a fixed grid increases .
 %
 
 Since the Lagrangian$_{Local}$ strategy was to discard trajectories exiting the rank-specific domain, this approach was susceptible to low-resolution data blocks (i.e, sampling would use a small number of particles per rank) and longer storage intervals (i.e., integration times).
@@ -136,9 +101,8 @@ Although the overall accuracy of the interpolated pathlines was high (within a s
 %
 These results highlight the limitations of the Lagrangian$_{Local}$ technique as is.
 %
-%That said, we discuss approaches that could mitigate these limitations in Section~\ref{sec:discussion}.
 
-%\vspace{-2mm}
+\vspace{-2mm}
 \subsubsection{C-II Results} 
 Here, we compared Lagrangian$_{Local}$ to an Eulerian representation with temporal subsampling.
 %
@@ -166,7 +130,7 @@ We considered a fixed amount of compute resources and varied configuration param
 %
 Figure~\ref{fig:dataset_timings} contains the computation costs for all \textbf{Phase-II} experiments.
 %
-\fix{Additionally, we derived, visualized, and compared the finite-time Lyapunov exponent (FTLE) scalar field using select Lagrangian$_{Local}$ flow maps for each of these data sets to the ground truth FTLE field.}
+{Additionally, we derived, visualized, and compared the finite-time Lyapunov exponent (FTLE) scalar field using select Lagrangian$_{Local}$ flow maps for each of these data sets to the ground truth FTLE field.}
 \input{dataset_timings.tex}
 \label{sec:experiment2}
 \vspace{-2mm}
@@ -174,7 +138,6 @@ Figure~\ref{fig:dataset_timings} contains the computation costs for all \textbf{
 \label{sec:abc}
 
 Table~\ref{abc_tab} lists all the ABC \textbf{Phase-II} test configurations.
-% and Figure~\ref{fig:abc_plot} shows the distribution of trajectory reconstruction error for each test.
 %
 \input{abc_table.tex}
 \input{abc_plot.tex}
@@ -195,25 +158,22 @@ The discarded trajectories from the ABC data set Lagrangian flow map were recons
 %
 Specifically, for all 9 tests, the mean reconstruction error was between 2.5\% and 5\% of GCS from the ground truth.
 %
+{Figure~\ref{abc_ftle} visualizes the FTLE field derived from the reduced Lagrangian$_{Local}$ test T6. 
+%
+Although reconstruction near extrema is similar to the ground truth, the FTLE is overestimated in other regions and artifacts are visible along node boundaries.}
 \input{abc_figure.tex}
 
 \textbf{Impact of Varying Storage Interval.} Figure~\ref{fig:abc_map} shows heatmaps of the reconstruction error across all intervals for tests T4 and T6.
 %
-The figure shows the absolute number of particles reconstructed for each storage interval for a more straightforward comparison between heatmaps.
+For a straightforward comparison, the figures show the absolute number of particles reconstructed for each storage interval.
 %
 Comparing these heatmaps, the effect of increasing the storage interval was that a larger number of particles were terminated in a single interval, and thus reconstruction error increased. 
 %
-%Further, the reconstruction error distribution matched the corresponding violin plots in Figure~\ref{fig:abc_plot}. 
-%
-\fix{While Figure~\ref{abc_ftle} shows the FTLE field derived from the reduced Lagrangian$_{Local}$ test T6 is similar to the ground truth, it contains some error along the node boundaries.}
-%Figure~\ref{abc_ftle} visualizes an FTLE field derived using the T6 Lagrangian$_{Local}$ flow map and annotates a discontinuity in the FTLE field caused by discarded particles.
-%Even for longer storage intervals, the error remained small, and the majority discarded trajectories were reconstructed with high accuracy for the ABC data set.
 
 \vspace{-2mm}
 \subsubsection{Nyx Cosmology}
 \label{sec:nyx}
 Table~\ref{nyx_tab} lists all the Nyx \textbf{Phase-II} test configurations. 
-%, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:nyx_plot} shows the distribution of trajectory reconstruction error for each test.
 %
 \input{nyx_table.tex}
 
@@ -233,26 +193,23 @@ Comparing tests T3 and T4 (1:1 data reduction factor) to tests T7 and T8 (1:8 da
 %
 For shorter storage interval lengths (T1, T2, T5, T6), the reconstruction quality was high for both data reduction factors.
 %
-\fix{Figure~\ref{nyx_ftle} compares the FTLE field derived by interpolating a single longer interval~(T3) to interpolating multiple intervals~(T1) of Lagrangian$_{Local}$ flow maps.
+{Figure~\ref{nyx_ftle} compares the FTLE field derived by interpolating a single longer interval~(T3) to interpolating multiple intervals~(T1) of Lagrangian$_{Local}$ flow maps.
 %
 Interpolating multiple intervals leads to error propagation.
 %
 The consequence of the error propagation was the noise introduced in the FTLE derived using T1 flow maps.
 %
 In contrast, interpolating the single longer interval of T3 flow maps generated an FTLE field closer to the ground truth.
-%In contrast, the single longer interval of T3  a more accurate result. 
 %
 }
 %
-%Lastly, Figure~\ref{fig:nyx_map} shows the distribution of error and temporal pattern of communication during the simulation. 
-% of a Nyx configuration.
+
 
 
 \vspace{-2mm}
 \subsubsection{Jet Flow}
 \label{sec:jet}
 Table~\ref{jet_tab} lists all the Jet \textbf{Phase-II} test configurations.
-%, Figure~\ref{fig:dataset_timings} contains computation costs, and Figure~\ref{fig:jet_plot} shows the distribution of trajectory reconstruction error for each test.
 %
 \input{jet_table.tex}
 
@@ -278,16 +235,7 @@ Further investigation into the distribution of T2 revealed that the longer stora
 %
 For tests using a storage interval of 10~(T2, T4, T6, T8), the reconstruction accuracy is reduced.
 %
-%The overall structure of FTLE ridges is preserved
-%The sparser sampling for other configurations with the same storage interval missed this effect.
-%
-%Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T2 Lagrangian$_{Local}$ flow map and annotates regions of reduced quality reconstruction.
-%
-%However, since the absolute number of particles stored for this test remained high at 97.9\%, most of the FTLE field structure was well reconstructed.
-%
-%Further, as the number of samples used reduces, the reconstruction of discarded trajectories can be multiple cells away from the ground truth.
-%
-%For example, T8 using 1:64 data reduction factor and a storage interval of 10, has a mean reconstruction of 150% of GCS.
+
 
 \textbf{Impact of Varying Data Reduction Factor.} Figure~\ref{fig:jet_map} compares the distribution of reconstruction error as the data reduction factor increases. 
 %
@@ -299,16 +247,8 @@ As the number of particles used to sample the domain reduced, a higher percentag
 %
 In Figure~\ref{fig:jet_7}, test T7 used a 1:64 data reduction factor and there are more red/orange cells with higher error during the later stages of the simulation. 
 %
-\fix{Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T1~(1:1) and T3~(1:8) Lagrangian$_{Local}$ flow maps.
+{Figure~\ref{jet_ftle} visualizes an FTLE field derived using the T1~(1:1) and T3~(1:8) Lagrangian$_{Local}$ flow maps.
 %
-%Considering the 1:8 data reduction for T3, the overall FTLE ridge structure can be visualized with some loss of accuracy.}
 Although for both tests the overall FTLE ridge structure can be visualized, for T3 using fewer particles, the loss of accuracy due to discarded trajectories is more evident. 
 %
-}%
-%Based on the distribution of error, the reconstruction accuracy is high when a 1:1 data reduction factor is used, and reduces in accuracy with fewer samples.
-%
-%Overall, as the number of particles used to sample the domain reduces the mean reconstruction error increases, with tests using a longer storage interval showing higher error.
-%
-%
-%Overall, based on the distribution of reconstruction accuracy, the probability of accurate reconstruction increases with more samples.
-%\input{jet_figure.tex}
+}

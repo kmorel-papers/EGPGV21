@@ -10,7 +10,6 @@ We used a one-dimensional linear interpolation $L$ of a function $f:\mathbb R\to
 \begin{footnotesize}
 \begin{eqnarray}
 \begin{aligned}\label{linearInterpolation}
-%\resizebox{0.45\textwidth}{!}
 L_{f(x_0),f(x_1)}(x) = \frac{x-x_0}{x_1-x_0}f(x_1) + \frac{x_1-x}{x_1-x_0}f(x_0).
 \end{aligned}
 \end{eqnarray}
@@ -24,13 +23,12 @@ Thus, its function value (the flow map) is not known.
 %
 However, we can reconstruct it from its known neighbors $L_{f(x_0),f(x_2)}(x_1)$. 
 %
-Consider a particle $x\in[x_0,x_1]\subset\mathbb R$ whose path is interpolated post hoc using this reconstructed value. 
+Consider a particle $x\in[x_0,x_1]\subset\mathbb R$ whose path is interpolated using this reconstructed value. 
 %
 We get the same result as if we had used the closest existing neighbors directly. Let $L'$ denote $L_{f(x_0),L_{f(x_0),f(x_2)}(x_1)}(x)$, then
 %
-\begin{footnotesize}
-%\begin{scriptsize}
 \begin{eqnarray}
+\begin{footnotesize}
 \begin{aligned}\label{doubleInterpolation}
 L' &\overset{\eqref{linearInterpolation}}= \frac{x-x_0}{x_1-x_0}L_{f(x_0),f(x_2)}(x_1) + \frac{x_1-x}{x_1-x_0}f(x_0)\\
 &\overset{\eqref{linearInterpolation}}= \frac{x-x_0}{x_1-x_0}(\frac{x_1-x_0}{x_2-x_0}f(x_2) + \frac{x_2-x_1}{x_2-x_0}f(x_0)) + \frac{x_1-x}{x_1-x_0}f(x_0)\\
@@ -38,27 +36,25 @@ L' &\overset{\eqref{linearInterpolation}}= \frac{x-x_0}{x_1-x_0}L_{f(x_0),f(x_2)
 &= \frac{x-x_0}{x_2-x_0}f(x_2) + \frac{x_2-x}{x_2-x_0}f(x_0)\\
 &\overset{\eqref{linearInterpolation}}= L_{f(x_0),f(x_2)}(x).
 \end{aligned}
-\end{eqnarray}
-%\end{scriptsize}
 \end{footnotesize}
+\end{eqnarray}
 %
-Bujack et al.~\cite{bujack2015lagrangian} previously established that the post hoc interpolation 
-of pathlines is a numerical one-step integration method~\cite{GH10}. 
+Bujack et al.~\cite{bujack2015lagrangian} previously established that the post hoc interpolation of pathlines is a numerical one-step integration method.
 %
-Its accuracy is bounded by its global truncation error at stitching step $n\in\mathbb N$ of 
+~Its accuracy is bounded by its global truncation error at stitching step $n\in\mathbb N$ of 
 %
-\begin{footnotesize}
 \begin{equation}
+\begin{footnotesize}
 \begin{aligned}\label{global}
 e_{n}\leq\frac {d^2}8(t_n-t_0) h_x^2\max_{\tau\in[t_0,t_n]}\max_{\zeta\in\mathbb R^d}
 \| H_{{\dot F}_{t_{j-1}}^{\tau}}(\zeta)\|_{\infty}e^{L(t_n-t_0)}
 \end{aligned}
-\end{equation}
 \end{footnotesize}
+\end{equation}
 %
 with dimension $d$, start time $t_0$, end time $t_n$, spatial Lipschitz constant $L$, Hessian $H$ of the temporal derivative of the flow map $\dot F$, and spatial distance $h_x$ between the flow map trajectories.
 %
-\fix{A detailed derivation of equation~\eqref{global} can be found in~\cite{bujack2015lagrangian}.}
+A detailed derivation of equation~\eqref{global} can be found in~\cite{bujack2015lagrangian}.
 %
 As a result, the interpolation error is $O(h_x^2)$ if the flow map has bounded second derivatives in space and first derivatives in time, which is a reasonable assumption for a differentiable vector field, because the solutions of an initial value problem depend smoothly on the initial conditions and time~\cite{hartman1973ordinary}.
 %
@@ -69,20 +65,20 @@ Its size is determined by the size of missing information, which is limited by t
 %
 If a particle is seeded further than $\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i)\|$ away from the node boundary, it cannot reach it and must therefore have the correct flow map information.
 %
-In the worst case, we can have missing information on both sides of the boundary, \fix{and therefore it follows from the mean value theorem that}
+In the worst case, we can have missing information on both sides of the boundary, {and therefore it follows from the mean value theorem that}
 %
-\begin{footnotesize}
 \begin{eqnarray}
+\begin{footnotesize}
 \begin{aligned}\label{hx}
 \tilde h_x&\leq 2h_x+2\max_{x_i\in\mathbb R^d} \max_{j=1..n} \| F_{j-1}^j(x_i) - x_i\|\\
 &\leq 2h_x+2 h_t \max_{x\in\mathbb R^d} \max_{t\in[t_{j-1},t_j]}\| v(x,t)\|
 \end{aligned}
-\end{eqnarray}
 \end{footnotesize}
+\end{eqnarray}
 %
 with the underlying velocity field $v:\mathbb R^d \times \mathbb R \to \mathbb R^d$ and the temporal step size $h_t$, which is the interval time between storing data to disk, usually around one-thousandth of the total integration time.
 %
-\fix{The future increase of the global truncation error of a particle that traverses this region can continue even after it has left the region, but for all particles that never enter the region close to the boundary, the original error bound holds.}
+{The future increase of the global truncation error of a particle that traverses this region can continue even after it has left the region, but for all particles that never enter the region close to the boundary, the original error bound holds.}
 %
 %\renewcommand{\baselinestretch}{1}
-
+%

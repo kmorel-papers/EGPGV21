@@ -11,17 +11,15 @@ Collectively, a large number of integral curves spanning the spatial domain can 
 The flow map $F_{t_0}^{t}(x_0):\mathbb R^d \times \mathbb R \times \mathbb R  \to \mathbb R^d$ describes to where a particle starting at position $x_0\in \mathbb R^d$ and time $t_0\in \mathbb R$ moves in the time interval $[t_0,t]\subset \mathbb R$~\cite{garth2007efficient}.
 %
 
-%Agranovsky et al.~\cite{agranovsky2014improved} used in situ processing to compute reduced Lagrangian flow maps. 
-%
 Agranovsky et al.~\cite{agranovsky2014improved} proposed a two phase approach: (1) use in situ processing to compute reduced Lagrangian flow maps, and (2) interpolate the flow maps for time-varying vector field exploration.
 %
 The study demonstrated significantly improved accuracy-storage propositions for exploration under sparse temporal settings compared to the traditional Eulerian approach.
 %
-The Eulerian approach is susceptible to error due to high numerical approximation in settings of temporal sparsity~\cite{costa2004lagrangian,Qin2014,agranovsky2014improved,sane2018revisiting}. 
+The Eulerian approach is susceptible to error due to high numerical approximation in settings of temporal sparsity~\cite{costa2004lagrangian,Qin2014,agranovsky2014improved,sane2018revisiting,rockwood2019practical}. 
 %
 In comparison, the Lagrangian approach benefits from access to the complete spatiotemporal resolution to compute flow maps.
 %
-Multiple works have advanced this research area by considering in situ sampling or extraction strategies~\cite{sane2019interpolation, rapp2019void}, and post hoc reconstruction and theoretical/empirical error analysis using the flow map as input~\cite{hlawatsch2011hierarchical, bujack2015lagrangian, chandler2015interpolation, chandler2016analysis, hummel2016error, sane2018revisiting, sane2019interpolation, rapp2019void, jakob2020fluid}.
+Multiple works have advanced this research area by considering in situ sampling or extraction strategies~\cite{sane2019interpolation, rapp2019void}, post hoc reconstruction and theoretical/empirical error analysis using the flow map as input~\cite{hlawatsch2011hierarchical, agranovsky2015multi, bujack2015lagrangian, chandler2015interpolation, chandler2016analysis, hummel2016error, sane2018revisiting, sane2019interpolation, rapp2019void, jakob2020fluid}, and the use of reduced data sets for analysis of ocean modeling applications~\cite{envirvis.20171099}.
 
 In this paper, we focus on the first phase, i.e., in situ computation of a Lagrangian flow map.
 %
@@ -31,37 +29,25 @@ Particles were seeded along a uniform grid, interpolated for a fixed number of c
 %
 Their study used CPUs on as many as 128 CNs.
 %
-Two other works have proposed in situ sampling strategies using particle trajectories. 
+Two other works have proposed relevant sampling strategies. 
 %
 First, Sane et al.~\cite{sane2019interpolation} proposed tracing longer trajectories, while storing intermediate particle locations at fixed storage intervals. 
-%First, Sane et al.~\cite{sane2019interpolation} explored a more complex strategy involving tracing longer trajectories, while storing particle locations at fixed storage intervals. 
 %
 In this approach, as particles diverged and clustered, a reconstruction error-guided sampling strategy added or removed particles.
 %
-%The study demonstrated that more complex techniques can provide up to 2x more accurate reconstruction than uniform sampling. 
-%
-%However, the technique was significantly more expensive and was demonstrated on a single node. 
-%
 Second, Rapp et al.~\cite{rapp2019void} applied a statistical sampling strategy based on the blue noise property to the extraction of particle trajectories. 
 %
-%This strategy too, however, was limited to a single node and would require additional research to handle boundary conditions in a distributed-memory setting.
-%
-Although these sampling strategies can yield an improved reconstruction compared to uniform or random sampling, they are limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory in situ setting. 
-%Although these works showed that more complex sampling strategies can yield an improved reconstruction of the time-varying vector field compared to uniform or random sampling, they were limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory in situ setting. 
-%
-%Although these studies demonstrated the possibility to improve on the accuracy, they were demonstrated on a small scale and complex when extending to more CNs (as seen in practical in situ environments). 
+Although these strategies can yield an improved reconstruction compared to uniform or random sampling, they are limited to a single CN, and they require additional research to keep execution time and/or memory requirements acceptable in a distributed-memory setting. 
 %
 Execution time and memory are limited resources when operating in situ, so the task of efficiently computing a Lagrangian flow map in distributed-memory remains challenging.
 
 \textbf{Distributed-Memory Particle Advection.}
 %
 Distributed-memory particle advection algorithms have historically been proposed for post hoc analysis.
-%Historically, distributed-memory particle advection has been performed for post hoc analysis.
 %
 We refer readers to comprehensive surveys~\cite{PeterkaRNLSKH11,zhang2018survey} on this topic for steady and unsteady vector fields in multinode settings.
 %
 However, the existing post hoc solutions are not directly applicable due to the different constraints and requirements of computing a Lagrangian flow map in situ.
-%However, performing in situ distributed-memory particle advection to compute a Lagrangian flow map has constraints and requirements different to the post hoc use case.
 %
 We identify and list these differences in Table~\ref{table:differences}.
 
@@ -73,18 +59,11 @@ Most studies in this area have required particle exchange, but a few have used p
 %
 Notably, Chen et al.~\cite{ChenXLS12, ChenS13} and Liao et al.~\cite{Liao2019ScalablePF} modify the data layout as a preprocessing step to propose parallelize-over-data techniques.
 %
-%To calculate steady state LIC of unstructured meshes, Liao et al.~\cite{Liao2019ScalablePF} first preprocess the data to group cells on CNs and then limit particle advection to within a cell to eliminate communication.
-%
 Using parallelize-over-particles strategies, Guo et al.~\cite{GuoHSZHY14} and Zhang et al.~\cite{ZhangGY16} moved and duplicated data between processors or used on-demand data loading.
 %
 Lastly, as an advection acceleration strategy, Bleile et al.~\cite{bleile2017accelerating} computed block-specific flow maps for a single time-slice as a communication-free preprocess and used the mapping to transport particles across entire blocks in a single step. 
 %
-However, this technique is only applicable for post hoc steady state vector field analysis.
-%
-Considering the constraints on memory and execution time in situ, and the time-varying nature of the data, existing strategies are either not applicable or viable. 
-%
-%Assuming an in situ routine can access only a single time-slice of the simulation at a time and operates on a simulation-determined data layout, these strategies are not applicable or viable after considering memory and execution time constraints, or the time-varying nature of the vector field.
-%Assuming an in situ routine can access only a single time-slice of the simulation at a time and operates on a simulation-determined data layout, these strategies are not applicable or viable after considering memory and execution time constraints, or the time-varying nature of the vector field.
+Considering in situ constraints, and the time-varying nature of the data, existing strategies are either not applicable or viable. 
 %
 
 In this paper, we consider a communication-free model for extracting local Lagrangian flow maps. 
@@ -92,68 +71,6 @@ In this paper, we consider a communication-free model for extracting local Lagra
 We compare this approach with the traditional computation of a Lagrangian flow map, which does incur communication costs.
 %
 Our comparisons are at scale and evaluate the respective performance benefits and reconstruction accuracy of the approach.
-%Next, we consider a communication-free model for extracting local Lagrangian flow maps and evaluate the performance benefits and reconstruction accuracy of this approach.
 %
 Based on our understanding of existing research in this area, in situ constraints, and practical temporal storage intervals, we believe the communication-free model is viable for a sampling strategy, and most importantly, intrinsically enables scalability to a large number of processors.
 
-%
-%
-%Distributed-memory particle advection scales poorly because as the number of compute nodes increases, the amount of communication required 
-%
-%With the exception of the study by Agranovsky et al.~\cite{agranovsky2014improved} 
-%
-%Using in situ processing to compute a Lagrangian flow map involves the extensively researched task of performing distributed memory particle advection.
-%%
-%However, the significant majority of these works have considered this operation in the context of post hoc analysis, rather than using in situ processing to compute a Lagrangian flow map.
-%%
-%The treatment of various considerations differs based on the context, i.e., post hoc or in situ analysis.
-%%
-%
-%Particle advection is the method used to compute particle trajectories or \textit{pathlines} to understand a time-varying vector field. 
-%%
-%Pathlines are commonly fundamental building blocks for popular time-varying vector field visualization techniques~(LIC, FTLE, path surfaces).
-%%
-%Depending on the task, the specifications of the pathlines, i.e., the number of particle advection \textit{steps}, maximum/minimum integration length, placement of seeds in domain, etc., can vary greatly.
-%%
-%For example, a visualization using pathlines might use hundreds of long trajectories strategically seeded, while computing the FTLE field will require a uniform sampling and multiple orders of magnitude greater number of particle trajectories, and computing a Lagrangian flow map in situ (to operate as a reduced data set) can require the computation of thousands or over hundred millions of particle trajectories based on the \textit{reduction factor}.
-%%
-%
-%In a distributed memory setting, load balancing and improving scalability have been the dominant focus for researchers seeking to improve the computation of particle trajectories.
-%%
-%Load balancing strategies can be required if there is a heterogenous distribution of particles in the domain.
-%%
-%In the context of computing a Lagrangian representation, however, research efforts have typically strived to maintain an approximately uniform sampling of the simulation domain~\cite{}.
-%%
-%An approximately uniform sampling strategy helps ensure good overall domain coverage, i.e., large regions of the domain are not completely void of samples, during post hoc exploration.
-%%
-%Assuming an algorithm parallelizes over the simulation spatial domain, calculating particle trajectories often requires particles to be exchanged, i.e., communicated, between compute nodes.
-%%
-%The cost of this communication has been shown to increase with the number of processors~\cite{}. 
-%%
-%To address this, researchers have proposed techniques that include X, Y, and Z.
-%%
-%These works have either considered a steady state, i.e., a vector field for a single time step, or an unsteady state, i.e., time-varying vector field.
-%%
-%
-%
-%
-%
-%
-%That said, each of the studies to improve the computational performance of distributed memory particle advection has been consired in a post hoc analysis environment.
-%%
-%In situ environments, in contrast to post hoc analysis environments, place constraints such as simulation-determined domain decomposition, limited memory to store particle trajectory information or the vector field at more than a single time slice at a time. 
-%
-%constraints limiting the number of 
-%
-%
-%It is worth noting here that the Lagrangian approach has been shown to be more accurate in these settings. 
-%
-%%
-%Further, these research works have predominantly proposed solutions for post hoc analysis and visualization tasks.
-%%
-%
-%
-%To perform particle advection in a distributed memory setting, there are typically three strategies
-%
-%
-%Computing a Lagrangian representation in situ involves 

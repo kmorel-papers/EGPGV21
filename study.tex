@@ -15,15 +15,12 @@ Configurations for the Cloverleaf3D simulation varied from $64^{3}$ ($\approx$ 2
 
 \textbf{Arnold-Beltrami-Childress (ABC) Flow.} This popular turbulent velocity field is a solution of Euler's equations in 3D for incompressible, inviscid fluid flows and is parameterized using three variables (we use $A=B=C=1$). 
 %
-%It is often considered a prototype for the study of turbulence. %~\cite{ershkov2016existence}.
-%
 We considered a grid size of $256^{3}$ ($\approx$ 16.5M cells) and generated 400 cycles of a time-dependent variant~\cite{brummell2001linear} with a time step of 0.001.
 
 \textbf{Nyx.} The Nyx simulation is a N-body and gas dynamics code for large-scale cosmological simulations~\cite{almgren2013nyx}. 
 %
 We used a test executable named TurbForce and generated 400 cycles of a $128^3$ data set ($\approx$ 2M cells) with a time step of 0.002.
 %
-%The generated flow field has regions of high velocity and grows in turbulence over the duration of the simulation. 
 
 \textbf{Jet Flow.} This data set is a simulation of a jet of high-velocity fluid entering a medium at rest. 
 %
@@ -36,22 +33,19 @@ The vector field is defined over a $128\times256\times128$ grid~($\approx$~4.1M 
 \label{sec:experiments}
 For this study, we conducted experiments in two phases. 
 
-%
-%For this study, we set up two workflows:
-%\begin{itemize}[leftmargin=*]
+
 \textbf{Phase-I.} The first phase of the experiments was conducted by directly integrating Ascent with the Cloverleaf3D simulation code. 
 %
 We conducted a weak scaling study on a modern supercomputer and considered the impact of the number of ranks and GPUs engaged per CN on execution time. 
 %
 Additionally, we performed two comparisons referred to as \textbf{C-I} and \textbf{C-II} using the Cloverleaf3D simulation code: 
-%and evaluate accuracy by calculating full pathlines post hoc: 
 %
 \vspace{-1mm}
 \begin{itemize}[leftmargin=*]
 \item\textbf{C-I.} We compared Lagrangian$_{Local}$ to Lagrangian$_{Dist}$ when the number of ranks for a fixed grid size, i.e., the degree of domain decomposition, varied.
 %
-\item\textbf{C-II.} We compared Lagrangian$_{Local}$ to the Eulerian technique to verify that accuracy-storage benefits observed in prior works remain. 
-\vspace{-1mm}
+\item\textbf{C-II.} We compared Lagrangian$_{Local}$ to the Eulerian technique to verify accuracy-storage benefits observed in prior works remain. 
+\vspace{-4mm}
 \end{itemize}
 %
 The results of \textbf{Phase-I} are presented in Section~\ref{sec:experiment1}.
@@ -64,59 +58,36 @@ A fixed number of resources (1 GPU/rank, 4 ranks/CN, 16 CNs) were used for these
 %
 Here, the number of particles used to sample the domain was controlled by a data reduction factor (denoted by 1:X, i.e., one particle for every X grid points). 
 %
-%We denote a particle data reduction factor in the form of 1:X, i.e., one particle for every X grid points.
-%
 We also considered multiple values for the storage interval. 
 %
-These tests provided insight into reconstruction accuracy, especially as vector field and configuration parameters varied. 
-%
-They also provided insight into the computational performance.
+These tests provided insight into reconstruction accuracy, especially as vector field and configuration parameters varied, as well as computational performance. 
 %
 The results of \textbf{Phase-II} are presented in Section~\ref{sec:experiment2}.
 
-%For each test of \textbf{Phase1} and \textbf{Phase2}, we execute both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$.
-%
-%Furthermore, we reconstruct the discarded trajectories from Lagrangian$_{Local}$ and compare them to the ground truth, i.e., a particle trajectory computed using every cycle of the time-varying vector field.
 
 \vspace{-2mm}
 \subsection{Evaluation}
 \label{sec:metrics}
-%We measure the execution time for both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ while executing in situ and use Ascent's timing functionality.
-%
 \textbf{Execution Time.} We measured different types of execution time --- particle advection, communication, and total time --- and reported the average per cycle across the entire run.
 %
 To simplify comparisons, we excluded cycles at the end of a storage interval. 
 %
 These cycles included a communication cost incurred by Lagrangian$_{Dist}$ to return all particles to the respective origin nodes. 
-%and an I/O cost to write data to disk.
 %
-\fix{In this paper, we do not analyze the parallel I/O times because (1) I/O times on supercomputers can be highly variable and lead to difficult interpretations, (2) infrequently performed I/O write times for our tests were less than the corresponding advection cost for a single step, and (3) local flow maps consistently led to fewer bytes stored, meaning we would expect I/O costs to not increase.}
+{In this paper, we do not analyze the parallel I/O times because (1) I/O times on supercomputers can be highly variable and lead to difficult interpretations, (2) infrequently performed I/O write times for our tests were less than the corresponding advection cost for a single step, and (3) local flow maps consistently led to fewer bytes stored, meaning we would expect I/O costs to not increase.}
 
 For post hoc reconstruction, a Delaunay triangulation was performed using CGAL~\cite{2020cgal} on a single-node workstation.
 %
 In our experiments, the number of points for both Lagrangian$_{Local}$ and Lagrangian$_{Dist}$ were of the same magnitude, and thus, required similar reconstruction times.
 %
-%An additional consideration is the time required for post hoc reconstruction.
-%
-%We only consider ``valid'' particle trajectories from either technique, thus requiring an interpolation strategy that can operate on an unstructured set of points.
-%
-%For our study, we used the same reconstruction implementation for both methods.
-%
-%Lagrangian$_{Local}$ would require performing triangulation over the same or less number of unstructured points as Lagrangian$_{Dist}$.
-%
-%Further, although our implementation can directly extend to a distributed setting, we were limited to single node reconstruction on our local research cluster.
-%
-%Since the focus of this paper is the in situ extraction phase, we leave optimizations and accelerations of post hoc techniques for future work.
 
 \textbf{Reconstruction Accuracy.} We quantitatively measured accuracy in two contexts: (1) reconstruction of any discarded particle trajectories and (2) full pathlines.  
-%We measure accuracy in two contexts: (1) to measure how accurately we can reconstruct any discarded particle trajectories, and (2) to measure the accuracy of full pathlines.  
 %
-In both cases, we measured Euclidean distances and represented error as a percentage of the grid cell side (GCS) to provide a perspective that is relative to the simulation domain.
+In both cases, we measured Euclidean distances and represented error as a percentage of the grid cell side (GCS) to provide a perspective relative to the simulation domain.
 %
-An error under 100\% of GCS indicates a reconstructed particle trajectory end point within one grid cell side of the ground truth.
+An error under 100\% of GCS indicates a particle trajectory end point within one grid cell side of the ground truth.
 
 The first priority was understanding how accurately we could reconstruct the flow map. 
-%, i.e., all particle trajectories computed using Lagrangian$_{Dist}$.
 %
 Since Lagrangian$_{Local}$ discards particle trajectories, potentially leaving a void of samples in the domain near boundaries, we reconstructed these trajectories by interpolating the stored flow map.
 %
@@ -135,18 +106,13 @@ Second, for \textbf{C-I} and \textbf{C-II} we measured the accuracy of new pathl
 In this case, pathlines were computed for the entire duration of the simulation run, and we reported the average L2-norm over all interpolated locations for each particle.
 %
 
-%Lastly, Lagrangian-based advection involves scattered point interpolation methods and, consequentially, any error introduced by the chosen method.
-%
-%Lagrangian-based advection used for pathline interpolation has been studied by prior works~\cite{agranovsky2015subsampling, bujack2015lagrangian, hummel2016error, sane2018revisiting, sane2019interpolation}. 
 \vspace{-2mm}
 \subsection{Runtime Environment}
 \label{sec:runtime}
 We tested the Lagrangian analysis techniques by running the experiments on Summit (a supercomputer at ORNL).
 %
 Each CN of Summit has two IBM Power9 CPUs,
-%, each with 22 cores running at 3.8 GHz and 512 GBytes of DDR4 memory.
 %
 each with enhanced on-chip acceleration via NVLink to 3 GPUs; the total GPUs per CN is 6.
-%Further, CNs on Summit have enhanced on-chip acceleration with each CPU connected via NVLink to 3 GPUs, for a total of 6 GPUs per CN.
 %
 Each GPU is a NVIDIA Tesla V100 with 5120 CUDA cores and 16 GBytes of HBM2 memory.

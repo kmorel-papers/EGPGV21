@@ -4,14 +4,30 @@
 
 
 \title[Scalable In Situ Computation of Lagrangian Representations via Local Flow Maps]%
-      {Scalable In Situ Computation of Lagrangian Representations via Local Flow Maps}
+      {Scalable In Situ Computation of Lagrangian Representations via Local Flow Maps\vspace{-0mm}}
 
 % for anonymous conference submission please enter your SUBMISSION ID
 % instead of the author's name (and leave the affiliation blank) !!
 % for final version: please provide your *own* ORCID in the brackets following \orcid; see https://orcid.org/ for more details.
 
-\author[SUBMISSION ID:1005]
-{SUBMISSION ID:1005}
+\author[S. Sane et al.]
+{\parbox{\textwidth}{\centering Sudhanshu Sane$^{1}$, Abhishek Yenpure$^{2}$, Roxana Bujack$^{3}$, Matthew Larsen$^{4}$, Kenneth Moreland$^{5}$, Christoph Garth$^{6}$, \\Chris R. Johnson$^{1}$ and Hank Childs$^{2}$
+}
+\\
+{\parbox{\textwidth}{\centering
+$^{1}$SCI Institute at University of Utah,
+$^{2}$University of Oregon,
+$^{3}$Los Alamos National Laboratory,
+$^{4}$Lawrence Livermore National Laboratory,\\
+$^{5}$Oak Ridge National Laboratory,
+$^{6}$Technische Universit{\"a}t Kaiserslautern
+\vspace{-0mm}
+}
+}
+}
+
+%\author[SUBMISSION ID:1005]
+%{SUBMISSION ID:1005}
 %\author[D. Fellner \& S. Behnke]
 %{\parbox{\textwidth}{\centering D.\,W. Fellner\thanks{Chairman Eurographics Publications Board}$^{1,2}$\orcid{0000-0001-7756-0901}
 %        and S. Behnke$^{2}$\orcid{0000-0001-5923-423X} 
@@ -72,10 +88,11 @@
 </concept>
 </ccs2012>
 \end{CCSXML}
-
 \ccsdesc[500]{Human-centered computing~Scientific visualization}
-\printccsdesc   
+\printccsdesc  
+\vspace{-0mm} 
 \end{abstract}  
+%\vspace{-20mm} 
 %-------------------------------------------------------------------------
 
 \input{outline.tex}

@@ -6,8 +6,6 @@
 \hline
 \textbf{Use Case} & \textbf{In situ reduction via Lagrangian flow map} & \textbf{Post hoc flow analysis} \\
 \hline
-%\textbf{Task} & Computation of Lagrangian flow map & Computation of particle trajectories for specific analysis \\
-%\hline
 \textbf{Input / Output} & Simulation vector field / Flow map & Eulerian mesh or flow map / Trajectories \\
 \hline
 \textbf{Objective} & Store representation of vector field & Analysis and visualization of vector field \\
@@ -19,10 +17,7 @@
 \textbf{Number of Steps} & Depends on storage interval/sampling strategy & Depends on analysis task \\
 \hline
 \textbf{Memory Constraints} & Shared with simulation code and typically limited
-%~(trajectory representation and number of time-slices accessible)
-%. Consequentially, particle trajectory represention and number of vector field time-slices accessible are restricted 
 & Can use all available memory \\
-%, but might be shared with visualization software \\
 \hline
 \textbf{Spatial Decomposition and Data Access} & Simulation-determined with each rank accessing one data block & Can be strategically modified, duplicated, requested on-demand, etc. \\
 \hline

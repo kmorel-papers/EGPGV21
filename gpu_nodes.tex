@@ -2,18 +2,18 @@
 \vspace{-4mm}
 \begin{subfigure}{0.495\linewidth}
 \centering
-\includegraphics[width=\linewidth]{Images/advection_time2.pdf}
+\includegraphics[width=\linewidth]{Images/advection_time2.eps}
 \vspace{-3mm}
 \caption{Costs of particle advection.}
 \label{fig:advection}
 \end{subfigure}
 \begin{subfigure}{0.495\linewidth}
 \centering
-\includegraphics[width=\linewidth]{Images/communication_time2.pdf}
+\includegraphics[width=\linewidth]{Images/communication_time2.eps}
 \vspace{-3mm}
 \caption{Costs of communication.}
 \label{fig:communication}
 \end{subfigure}
-\caption{\fix{Results for weak scaling the number of GPUs or ranks (4 or 6) per compute node. Lagrangian$_{Local}$ particle advection costs are plotted in~\ref{fig:advection} and Lagrangian$_{Dist}$ communication costs are in~\ref{fig:communication}. While particle advection performed better with fewer GPUs sharing memory on a single compute node~(\ref{fig:advection}), communication benefitted from MPI optimizations when more ranks execute on a single compute node~(\ref{fig:communication}).}} 
+\caption{{Results for weak scaling the number of GPUs or ranks (4 or 6) per compute node. Lagrangian$_{Local}$ particle advection costs are plotted in~\ref{fig:advection} and Lagrangian$_{Dist}$ communication costs are in~\ref{fig:communication}. While particle advection performed better with fewer GPUs sharing memory on a single compute node~(\ref{fig:advection}), communication benefitted from MPI optimizations when more ranks execute on a single compute node~(\ref{fig:communication}).}} 
 \label{fig:gpu_nodes}
 \end{figure}

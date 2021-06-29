@@ -4,7 +4,7 @@ While scalability is the major benefit of local Lagrangian flow maps, this benef
 %
 %In particular, we observe this for the Jet data set.
 %
-Lagrangian$_{Local}$ reconstruction accuracy can be adversely affected if the storage interval is too large or if too few samples are stored.
+%Lagrangian$_{Local}$ reconstruction accuracy can be adversely affected if the storage interval is too large or if too few samples are stored.
 %
 %This limits the potential amount of data reduction in comparison to Lagrangian$_{Dist}$.
 %
@@ -18,8 +18,10 @@ Lagrangian$_{Local}$ reconstruction accuracy can be adversely affected if the st
 %
 %However, this strategy is only effective as long as Lagrangian$_{Local}$ still stores a sufficient number of samples. 
 %
-While both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error (as shown in Figure~\ref{fig:strongscaling}), the error of Lagrangian$_{Local}$ increases faster when using a small number of samples or large storage intervals.
+While both Lagrangian$_{Dist}$ and Lagrangian$_{Local}$ show error (as shown in Figure~\ref{fig:strongscaling}), the error of Lagrangian$_{Local}$ increases faster if the storage interval is too large or if too few sampled are stored. 
+%when using a small number of samples or large storage intervals.
 %
+{Lastly, although our strategy relies on spatiotemporal coherance, discarding a large number of particles could introduce biases in the extracted flow map and misrepresent regions.}
 
 We briefly discuss two solutions to these challenges.
 %
@@ -36,25 +38,25 @@ The second solution is to stop discarding trajectories that hit the domain bound
 %
 In this case, Lagrangian analysis could remain communication-free but would need enhancements not only for how to represent trajectories (termination location and time, number of points stored along pathline), but also would require a novel post hoc interpolation scheme.
 %
-\fix{For example, extensions of recent works on in situ sampling strategies~\cite{sane2019interpolation, rapp2019void} and post hoc reconstruction leveraging deep learning~\cite{jakob2020fluid} offer potential solutions.}
+For example, extensions of recent works on in situ sampling strategies~\cite{sane2019interpolation, rapp2019void} and post hoc reconstruction leveraging deep learning~\cite{jakob2020fluid} offer potential solutions.
 %
 %In this case, Lagrangian analysis would remain communication-free but would need enhancements not only for how to represent trajectories that end abruptly (location, time, number of points along the curve, etc.) involves Lagrangian analysis remaining communication-free while adopting a more complex strategy for domain coverage with particle termination information (location, time) stored.
 %
 %A flow map with arbitrary termination times for particle trajectories, however, would require a novel post hoc interpolation scheme.
 %
 
-\fix{Another challenge for Lagrangian analysis is adaptively determining the appropriate storage interval. 
+Another challenge for Lagrangian analysis is adaptively determining the appropriate storage interval. 
 %
-Determining the temporal sampling rate on a per particle basis could offer improved data reduction propositions and greater temporal resolution for reconstruction.
+%Determining the temporal sampling rate on a per particle basis could offer improved data reduction propositions and greater temporal resolution for reconstruction.
 %
-Further, motivated by our results and to limit uncertainty, we believe it would be worthwhile to investigate time-varying flow visualization techniques that utilize individual intervals of Lagrangian flow maps.
+Additionally, motivated by our results and to limit uncertainty, we believe it would be worthwhile to investigate flow visualization techniques that utilize individual intervals of flow maps.
 %
 Lastly, our paper presented a study that considered the entire flow field without an analysis of specific features.
 %
-Research understanding the uncertainty introduced by various reduced representations~(Eulerian, Lagrangian, ZFP, etc.) when reconstructing specific features of interest would be valuable to the visualization community.
+Research understanding the uncertainty of specific features of interest introduced by various reduced representations~(Eulerian, Lagrangian, ZFP, etc.) would be valuable to the visualization community.
 %
 We believe these challenges should be pursued for future work. 
 %
-That said, we believe a number of use cases for Lagrangian analysis in practice today could benefit from flow maps extracted using a communication-free model.}
+That said, we believe a number of use cases for Lagrangian analysis in practice today could benefit from flow maps extracted using a communication-free model.
 \input{jet_figure.tex}
 
